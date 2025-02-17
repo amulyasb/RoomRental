@@ -1,0 +1,67 @@
+.c-register-right {
+    color: #2A3855;
+
+}
+
+.btn-register {
+    background-color: #ffffff;
+    color: #2A3855;
+    border: 2px solid #2A3855;
+}
+
+.btn-register:hover {
+    background-color: #2A3855 !important;
+    color: white !important;
+    transform: scale(1.00) !important;
+    box-shadow: 0 4px 8px rgba(42, 56, 85, 0.3);
+}
+
+.register-container b {
+    color: #2A3855;
+
+}
+
+/* Message display styling */
+.messages {
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.c-register-right-h1 {
+    font-size: 3.3rem !important;
+}
+
+@media (max-width: 760px) {
+    .c-register-right-h1 {
+        font-size: 2.8rem !important;
+    }
+}
+
+@media (max-width: 496px) {
+    .c-register-right-h1 {
+        font-size: 2.5rem !important;
+    }
+
+    .register-container img {
+        width: 150px;
+        height: 100px;
+    }
+}

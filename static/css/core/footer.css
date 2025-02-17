@@ -1,0 +1,32 @@
+/* footer section */
+.footer {
+    background-color: #2A3855;
+    color: #f8f9fa;
+    padding: 40px 0;
+    max-width: 100%;
+    margin-top: auto;
+}
+
+.footer-icons {
+    display: inline;
+}
+
+.footer a {
+    color: #f8f9fa;
+    text-decoration: none;
+}
+
+.footer ul li a:hover {
+    color: #d1d1d1;
+    background-color: #2A3855;
+    border: 1px solid #d1d1d1;
+    display: block;
+    border-radius: 5px;
+}
+
+.footer .social-icons a {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+/* footer section */

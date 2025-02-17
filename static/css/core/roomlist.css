@@ -1,0 +1,81 @@
+.sidebar {
+    background: #f8f9fa;
+    padding: 20px;
+    height: 100vh;
+}
+
+.btn-roomlist-sidebar {
+    background-color: #ffffff;
+    color: #2A3855;
+    border: 2px solid #2A3855;
+}
+
+.btn-roomlist-sidebar:hover {
+    background-color: #2A3855;
+    color: white;
+}
+
+/* Responsive carousel */
+
+@media (max-width: 1086px) and (min-width: 768px) {
+
+
+    .roomlist-sroom {
+        width: 50% !important;
+    }
+
+    .listroom-btn {
+        padding: 8px 20 px !important;
+    }
+}
+
+@media (max-width: 801px) {
+    .listroom-btn {
+        padding: 5px !important;
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto;
+    }
+
+    .roomlist-sroom {
+        width: 50% !important;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .sidebar {
+        height: auto;
+    }
+
+    .listroom-btn {
+        padding: 3px !important;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .sidebar {
+        height: auto;
+    }
+
+    .listroom-btn {
+        padding: 3px !important;
+    }
+
+    .listroom-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .roomlist-sroom {
+        width: 100% !important;
+    }
+
+}

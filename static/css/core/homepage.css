@@ -1,0 +1,422 @@
+/* Carousal */
+.carousel {
+    height: 550px;
+    overflow: hidden;
+    width: 100%;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+    position: relative;
+}
+
+.carousel-caption-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #2A3855;
+    z-index: 10;
+
+}
+
+.carousel-caption-title {
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1)
+}
+
+.carousel-caption-text {
+    color: #2A3855;
+    font-weight: 400;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    line-height: 1.5;
+    font-size: 1.2rem;
+}
+
+.carousel-btn {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    text-decoration: none;
+    height: 50px;
+    width: auto;
+    background-color: #2A3855;
+    color: white;
+    border-radius: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+}
+
+.carousel-btn:hover {
+    background-color: #324260;
+    color: #ffffff;
+    border: 1px solid #1a2b3c;
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgba(42, 56, 85, 0.4);
+    cursor: pointer;
+}
+
+.carousel-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(42, 56, 85, 0.3);
+}
+
+.carousel-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.carousel-right-content {
+    color: #2A3855 !important;
+}
+
+/* Carousal section */
+
+
+/* featured room */
+.featured-rooms {
+    background-color: #f8f9fa;
+}
+
+.featured-title {
+    color: #324260;
+}
+
+.card {
+    transition: transform 0.3s ease;
+    border-radius: 15px;
+    background-color: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+}
+
+.room-name {
+    color: #324260;
+}
+
+.room-details {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.room-price {
+    color: #324260;
+}
+
+.btn-primary-custom {
+    background-color: #ffffff;
+    border: 2px solid #2A3855 !important;
+    color: #2A3855;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 20px;
+}
+
+.btn-primary-custom:hover {
+    background-color: #2A3855;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.featured-btn-view-more {
+    background-color: #ffffff;
+    border: 2px solid #2A3855;
+    color: #2A3855;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    margin: 1rem;
+}
+
+.featured-btn-view-more:hover {
+    background-color: #2A3855;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* featured room */
+
+/* join with us section */
+.join-with-us-main {
+    background-color: #f8f9fa;
+
+}
+
+.join-with-us .col {
+    background-color: #2A3855;
+    border-radius: 5px;
+}
+
+.join-with-us h1 {
+    color: white;
+}
+
+.join-with-us p {
+    color: white;
+}
+
+.join-with-us a {
+    color: #2A3855;
+    text-decoration: none;
+    background-color: white;
+}
+
+.join-with-us a:hover {
+    color: white;
+    border: 2px solid #ffffff;
+    background-color: #2A3855;
+}
+
+/* join with us section */
+
+/* How it work Section */
+.how-it-work {
+    color: #2A3855;
+    background-color: #f8f9fa;
+
+}
+
+.CustomerOrseller-Btn {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 10px;
+    padding-top: 1rem;
+}
+
+.CustomerOrseller-Btn a {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: 2px solid #2A3855;
+    text-decoration: none;
+    color: #2A3855;
+    border-radius: 5px;
+
+}
+
+.CustomerOrseller-Btn a:hover {
+    background-color: #2A3855;
+    color: white;
+}
+
+.CustomerOrseller-Btn a.active {
+    background-color: #2A3855;
+    color: white;
+}
+
+/* How it work Section */
+
+
+/* Our city section */
+.Our-cities {
+    background-color: #f8f9fa;
+
+}
+
+.Our-cities .container {
+    background-color: #2A3855;
+    color: white;
+    border-radius: 5px;
+
+}
+
+.Our-cities ul li a {
+    color: #ffffff !important;
+}
+
+.Our-cities h2 {
+    color: #ffffff;
+}
+
+.Our-cities h5 {
+    color: #ffffff;
+    font-weight: 400;
+}
+
+/* Our city section */
+
+
+/* Responsive carousel */
+@media (max-width: 1200px) {
+    .carousel {
+        width: 80%;
+    }
+
+}
+
+@media (max-width: 1197px) and (min-width: 1002px) {
+    .btn-primary-custom {
+        font-size: 10px;
+    }
+
+}
+
+
+@media (max-width: 992px) {
+    .carousel {
+        width: 90%;
+        height: 500px;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .text-content {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    h1.fw-bold {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem !important;
+    }
+
+    h4.fw-light {
+        font-size: 1.1rem;
+    }
+
+    p {
+        font-size: 0.8rem;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .carousel-caption-title {
+        font-weight: bold;
+        font-size: 2.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1)
+    }
+
+    .carousel-caption-text {
+        color: white;
+        font-weight: 400;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        line-height: 1.5;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .carousel {
+        height: 350px;
+        margin-bottom: 1.5rem;
+        /* width: 90%; */
+    }
+
+    .text-content {
+        padding: 0 1.5rem;
+        text-align: center !important;
+    }
+
+    h1.fw-bold {
+        font-size: 2rem;
+    }
+
+    h4.fw-light {
+        font-size: 1.25rem;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+
+    .carousel-caption-title {
+        font-weight: bold;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1)
+    }
+
+    .carousel-caption-text {
+        color: white;
+        font-weight: 400;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        line-height: 1;
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .carousel {
+        width: 100%;
+        height: 250px;
+    }
+
+    .carousel-caption {
+        font-size: 12px;
+    }
+
+    .carousel-item img {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+    }
+
+    .carousel-btn {
+        height: 40px;
+        margin-top: 10px;
+        font-size: 0.6rem;
+
+    }
+
+    .carousel-caption-title {
+        font-weight: bold;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1)
+    }
+
+    .carousel-caption-text {
+        color: white;
+        font-weight: 400;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        line-height: 1;
+        font-size: 0.6rem;
+    }
+
+    .how-it-work-title {
+        font-size: 1.5rem !important;
+    }
+
+    .how-it-work-htw-allHeaders {
+        font-size: 1.3rem !important;
+    }
+
+    .how-it-work .fas {
+        font-size: 5rem;
+    }
+
+    .CustomerOrseller-Btn {
+        justify-content: center !important;
+    }
+
+    .CustomerOrseller-Btn a {
+        padding: 6px 12px;
+        font-size: 0.875rem;
+    }
+
+}

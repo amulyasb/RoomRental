@@ -1,0 +1,125 @@
+body {
+    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
+}
+
+.login-container {
+    background-color: #ffffff;
+    padding: 30px;
+    margin-top: 10%;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+h3,
+h2 {
+    font-weight: 600;
+    color: #2A3855;
+}
+
+h2 {
+    color: #2A3855;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+.form-floating input {
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.form-floating label {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.btn-login {
+    background-color: #2A3855 !important;
+    border: 2px solid #2A3855;
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: #2A3855 !important;
+    color: white !important;
+    transform: scale(1.00) !important;
+    box-shadow: 0 4px 8px rgba(42, 56, 85, 0.3);
+}
+
+.link-primary {
+    color: #1d72b8;
+    font-weight: 500;
+}
+
+.link-primary:hover {
+    text-decoration: underline;
+}
+
+.text-secondary {
+    font-size: 0.9rem;
+}
+
+/* Message display styling */
+.messages {
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 576px) {
+    .login-container {
+        padding: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    h3,
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    .btn-primary {
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+}
+
+@media(max-width: 741px) {
+    .login-container img {
+        width: 150px;
+        height: 100px;
+    }
+}
