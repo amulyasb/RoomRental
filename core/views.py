@@ -25,3 +25,6 @@ def roomlist(request):
         'cities':cities,
     }
     return render(request, "core/roomlist.html", data)
+
+def roomdetail(request):
+    return render(request, "core/roomdetail.html")

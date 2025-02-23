@@ -1,0 +1,112 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+    <!-- Room Detail Section -->
+    <div class="container my-5">
+        <div class="row g-4">
+            <!-- Room Details -->
+            <div class="col-lg-9 col-md-8">
+                <div class="card shadow">
+                    <!-- Room Image -->
+                    <div class="position-relative">
+                        <img src="{% static 'img/room1.webp' %}" class="room-detail-img" alt="Room Image">
+                        <!-- Price Tag Overlay -->
+                        <div class="position-absolute bottom-0 start-0 text-white p-3 rounded-tr price-ab">
+                            <h3 class="mb-0">$99<span class="fs-6">/night</span></h3>
+                        </div>
+                    </div>
+
+                    <!-- Room Content -->
+                    <div class="card-body p-4">
+                        <!-- Title and Address -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h2 class="card-title mb-0">Deluxe Suite</h2>
+                        </div>
+                        <p class="card-text text-muted mb-4">
+                            <i class="fas fa-map-marker-alt me-2"></i>123 Main Street, Cityville
+                        </p>
+
+                        <!-- Description -->
+                        <div class="card-text mb-4">
+                            <input type="checkbox" id="toggleDescription" class="d-none">
+                            <p class="text-muted mb-2 description">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dignissim enim at
+                                risus dignissim,
+                                sed volutpat nulla pulvinar.
+                                <span class="more-text">
+                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quidem, incidunt.
+                                </span>
+                            </p>
+                            <label for="toggleDescription" class="text-primary text-decoration-none"
+                                style="cursor:pointer;"></label>
+                        </div>
+
+                        <!-- Book Now Button -->
+                        <div class="btns d-flex flex-wrap gap-3 p-3">
+                            <button class="room-detail-btn w-100 w-md-50 py-2 fs-5 fw-semibold">
+                                <i class="fas fa-calendar-check me-2"></i>Chat with Seller
+                            </button>
+                            <button class="room-detail-btn w-100 w-md-50 py-2 fs-5 fw-semibold">
+                                <i class="fas fa-calendar-check me-2"></i>Book Appoinment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seller Box -->
+            <div class="col-lg-3 col-md-4">
+                <div class="card p-3 text-center">
+                    <img src="{% static 'img/man.webp' %}" class="card-img-top rounded-circle mx-auto mt-3 seller-img" alt="Seller Image">
+                    <div class="card-body">
+                        <h4 class="card-title fs-5">John Doe</h4>
+                        <p class="card-text fs-6 text-muted">Trusted Seller</p>
+                        <p class="card-text fs-6 text-muted">Date Joined: <br>2024-4-12</p>
+                        <button class="room-deatil-seller-btn w-100 fs-5 fw-semibold">Seller Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Gallery -->
+    <div class="container my-5">
+        <h2 class="text-center mb-2">Room Views</h2>
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center mt-4">
+                <img src="{% static 'img/s1.bmp' %}" alt="Room View" class="img-fluid gallery-thumb">
+            </div>            
+            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-item-center mt-4">
+                <img src="{% static 'img/room1.webp' %}" alt="Room View" class="img-fluid gallery-thumb">
+            </div>
+            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-item-center mt-4">
+                <img src="{% static 'img/s4.bmp' %}" alt="Room View" class="img-fluid gallery-thumb">
+            </div>
+            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-item-center mt-4">
+                <img src="{% static 'img/s3.bmp' %}" alt="Room View" class="img-fluid gallery-thumb">
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Specifications -->
+    <div class="container my-5">
+        <div class="room-detail-specifications p-4 text-light shadow">
+            <h2 class="mb-4 fw-bold fs-2 text-capitalize">ROOM SPECIFICATION</h2>
+            <div class="row">
+                <div class="col-12">
+                    <ul class="spec-list">
+                        <li><strong>Wifi:</strong> No</li>
+                        <li><strong>AC:</strong> Yes</li>
+                        <li><strong>TV:</strong> Yes</li>
+                        <li><strong>Parking:</strong> Available</li>
+                        <li><strong>Breakfast:</strong> Included</li>
+                        <li><strong>Pet Friendly:</strong> No</li>
+                        <li><strong>Pool:</strong> Yes</li>
+                        <li><strong>Gym:</strong> No</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

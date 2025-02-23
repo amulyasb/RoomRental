@@ -8,5 +8,6 @@ from core import views
 urlpatterns = [
     path("", views.homepage, name="homepage"),
     path("roomlist/", views.roomlist, name="roomlist"),
+    path("roomdetail/", views.roomdetail, name="roomdetail"),
 
 ]

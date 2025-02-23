@@ -252,3 +252,11 @@ def logout_user(request):
     logout(request)
     return redirect('homepage')
 
+
+
+# Seller Functions
+
+# seller dashboard
+def seller_dashboard(request):
+    return render(request, "sellerfunction/seller_dashboard.html")
+
