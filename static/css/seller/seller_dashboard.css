@@ -36,8 +36,14 @@ nav.bg-dark {
     background-color: white;
 }
 
+
 .btn-s-dashboard-add-room:hover {
-    color: white;
+    color: white !important;
+    background-color: #2A3855 !important;
+}
+
+.btn-s-dashboard-add-room a:hover {
+    color: white !important;
     background-color: #2A3855;
 }
 

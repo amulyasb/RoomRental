@@ -1,0 +1,219 @@
+{% extends "seller_base/sidebar_base.html" %}
+{% load static %}
+{% block content %}
+    <style>
+        .sidebar-img {
+            border-radius: 5px;
+        }
+
+        .flex-grow-1 {
+            margin-left: 250px;
+        }
+
+        .add-room-btn {
+
+            background-color: #fdfdfd;
+            color: #2A3855;
+            border: 2px solid #2A3855;
+        }
+
+        .add-room-btn:hover {
+            background-color: #2A3855;
+            color: white;
+        }
+
+        nav.bg-dark {
+            position: fixed;
+            height: 100vh;
+            width: 250px;
+            overflow-y: auto;
+            background-color: #2A3855 !important;
+        }
+
+        .offcanvas {
+            background-color: #2A3855 !important;
+
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            margin-bottom: 10px;
+        }
+
+        #specifications-container .form-row {
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 767px) {
+
+            .flex-grow-1 {
+                margin-left: 0;
+                /* Adjust based on sidebar width */
+            }
+        }
+    </style>
+
+    {% comment %} <div class="d-flex">
+        <!-- Sidebar -->
+        <nav class="bg-dark text-white p-3 vh-100 d-none d-md-block" style="width: 250px;">
+            <div class="text-center">
+                <div class="bg-light sidebar-img">
+                    <img src="logo.png" alt="Logo" class="img-fluid p-1" style="height: 60px;">
+                </div>
+                <h4 class="mt-2">Seller Dashboard</h4>
+            </div>
+            <ul class="nav flex-column mt-3">
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-home me-2"></i>
+                        Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-box me-2"></i>
+                        Rooms</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-shopping-cart me-2"></i>
+                        Payments</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-chart-line me-2"></i>
+                        Subscription</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-cog me-2"></i>
+                        Profile</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-cog me-2"></i>
+                        Logout</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-4">
+            <button class="btn btn-dark d-md-none mb-3" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#mobileSidebar">
+                ☰ Menu
+            </button>
+
+            <!-- Mobile Sidebar -->
+            <div class="offcanvas offcanvas-start text-white" id="mobileSidebar" style="width: 250px;">
+                <div class="offcanvas-header">
+                    <h5>Seller Dashboard</h5>
+                    <button type="button" class="btn-close text-reset bg-light" data-bs-dismiss="offcanvas"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-home me-2"></i>
+                                Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-box me-2"></i>
+                                Rooms</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i
+                                    class="fas fa-shopping-cart me-2"></i> Appointments</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i
+                                    class="fas fa-chart-line me-2"></i> Payments</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-cog me-2"></i>
+                                Subscription</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-cog me-2"></i>
+                                Profile</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-cog me-2"></i>
+                                Logout</a></li>
+                    </ul>
+                </div>
+            </div> {% endcomment %}
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="container">
+                    <h2 class="mb-4">Add Room</h2>
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="room_title" class="form-label">Room Title:</label>
+                                <input type="text" class="form-control" id="room_title" name="room_title" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="desc" class="form-label">Description:</label>
+                                <textarea class="form-control" id="desc" name="desc" rows="4" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="city" class="form-label">City:</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rent" class="form-label">Rent:</label>
+                                <input type="number" class="form-control" id="rent" name="rent" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="room_image" class="form-label">Main Image:</label>
+                            <input type="file" class="form-control" id="room_image" name="room_image" required>
+                        </div>
+
+                        <div id="image-upload-container">
+                            <div class="mb-3">
+                                <label for="room_image_1" class="form-label">Additional Image:</label>
+                                <input type="file" class="form-control" id="room_image_1" name="room_image_1">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" id="add-image-button">+ Add Image</button>
+
+                        <div id="specifications-container">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Specification Name:</label>
+                                    <input type="text" class="form-control spec_name" name="spec_name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Specification Detail:</label>
+                                    <input type="text" class="form-control spec_detail" name="spec_detail" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary mb-3" id="add-spec-button">+ Add
+                            Specification</button>
+                        <div class="add-room-btn-div">
+                            <button type="submit" class="btn add-room-btn w-100">Add Room</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Add Image Button Functionality
+            document.getElementById('add-image-button').addEventListener('click', function () {
+                const container = document.getElementById('image-upload-container');
+                const imageCount = container.querySelectorAll('input[type="file"]').length;
+
+                const newImageGroup = document.createElement('div');
+                newImageGroup.className = 'mb-3';
+                newImageGroup.innerHTML = `
+                <label for="room_image_${imageCount + 2}" class="form-label">Additional Image:</label>
+                <input type="file" name="room_image_${imageCount + 2}" id="room_image_${imageCount + 2}" class="form-control">
+            `;
+                container.appendChild(newImageGroup);
+            });
+
+            // Add Specification Button Functionality
+            document.getElementById('add-spec-button').addEventListener('click', function () {
+                const container = document.getElementById('specifications-container');
+
+                const newSpecRow = document.createElement('div');
+                newSpecRow.className = 'row mb-3';
+                newSpecRow.innerHTML = `
+                <div class="col-md-6">
+                    <label for="spec_name_${container.children.length + 1}" class="form-label">Specification Name:</label>
+                    <input type="text" name="spec_name_${container.children.length + 1}" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="spec_detail_${container.children.length + 1}" class="form-label">Specification Detail:</label>
+                    <input type="text" name="spec_detail_${container.children.length + 1}" class="form-control" required>
+                </div>
+            `;
+                container.appendChild(newSpecRow);
+            });
+        </script>
+{% endblock content %}

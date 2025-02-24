@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from accounts.models import *
 
 # Create your views here.
@@ -10,6 +10,9 @@ def homepage(request):
 
     if request.user.is_authenticated:
         user = request.user
+        # Check if the user is not a customer
+        if request.user.user_type != 'customer':  
+            return redirect('login_user')
 
     data = {
         'type': how_it_work_section,
@@ -30,5 +33,4 @@ def roomdetail(request):
     return render(request, "core/roomdetail.html")
 
 
-def seller_dashboard(request):
-    return render(request, "seller/seller_dashboard.html")
+
