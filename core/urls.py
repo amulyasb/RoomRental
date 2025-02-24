@@ -10,4 +10,8 @@ urlpatterns = [
     path("roomlist/", views.roomlist, name="roomlist"),
     path("roomdetail/", views.roomdetail, name="roomdetail"),
 
+
+    # seller functions
+    path("seller_dashboard/", views.seller_dashboard, name="seller_dashboard"),
+
 ]

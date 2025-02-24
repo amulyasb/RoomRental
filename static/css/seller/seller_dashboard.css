@@ -1,0 +1,50 @@
+.sidebar-img {
+    border-radius: 5px;
+}
+
+.welcome-content {
+    color: #2A3855;
+}
+
+nav.bg-dark {
+    position: fixed;
+    height: 100vh;
+    width: 250px;
+    overflow-y: auto;
+    background-color: #2A3855 !important;
+}
+
+.flex-grow-1 {
+    margin-left: 120px;
+    /* Adjust based on sidebar width */
+}
+
+.Listed-Rooms-header {
+    color: #2A3855;
+}
+
+.table-head th {
+    background-color: #2A3855 !important;
+    color: white;
+    /* Optional: Ensure text is visible */
+}
+
+
+.btn-s-dashboard-add-room {
+    color: #2A3855;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.btn-s-dashboard-add-room:hover {
+    color: white;
+    background-color: #2A3855;
+}
+
+@media (max-width: 767px) {
+
+    .flex-grow-1 {
+        margin-left: 0;
+        /* Adjust based on sidebar width */
+    }
+}

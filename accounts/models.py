@@ -23,7 +23,7 @@ class User(AbstractUser):
     city = models.ForeignKey(city, on_delete=models.CASCADE, null=True, blank=True, default=None)
     is_subscribed = models.BooleanField(default=False)
     subscription_end_date = models.DateTimeField(null=True, blank=True)
-    user_image = models.ImageField(upload_to="img/user_img", default="")
+    user_image = models.ImageField(upload_to="img/user_img", default="", null=True)
 
     username = None
 

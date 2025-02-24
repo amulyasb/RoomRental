@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 import uuid
 import json
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.storage import default_storage
+
 
 
 # Create your views here.
@@ -124,6 +126,11 @@ def seller_registration(request):
                 'password': password,
                 }
             ) 
+            # Save image temporarily
+            if photo:
+                file_path = f"img/user_img/{photo.name}"
+                default_storage.save(file_path, photo)
+
             print("session data stored:", request.session['temp_user'])
             return redirect(response_data['payment_url'])
         
@@ -172,27 +179,31 @@ def verify_payment(request):
                     
                     start_date = datetime.now()
                     end_date = start_date + timedelta(days=30)
-
+                    
                     user = User.objects.create_user(
                         email=temp_user.get('email'),
                         name=temp_user.get('name'),
                         phone=temp_user.get('phone'),
                         city=city_obj,
                         password=temp_user.get('password'),
-                        user_image=temp_user.get('photo', None),
+                        # user_image=temp_user.get('photo', None),
                         user_type='seller',
                         is_subscribed=True,
                         subscription_end_date=end_date,
                     )
-                    print("User Created Successfully!")
-                    print("Email:", user.email)
-                    print("Name:", user.name)
-                    print("Phone:", user.phone)
-                    print("City:", user.city)
-                    print("Photo:", user.user_image)
-                    print("User Type:", user.user_type)
-                    print("is_subscribed:", user.is_subscribed)
-                    print("subscription_end_date:", user.subscription_end_date)
+                    # Assign the saved image to the user
+                    if temp_user.get('photo'):
+                        user.user_image = f"img/user_img/{temp_user['photo']}"
+                        user.save()
+                    # print("User Created Successfully!")
+                    # print("Email:", user.email)
+                    # print("Name:", user.name)
+                    # print("Phone:", user.phone)
+                    # print("City:", user.city)
+                    # print("Photo:", user.user_image)
+                    # print("User Type:", user.user_type)
+                    # print("is_subscribed:", user.is_subscribed)
+                    # print("subscription_end_date:", user.subscription_end_date)
 
                     Subscription.objects.create(
                         seller=user, 
@@ -236,7 +247,7 @@ def login_user(request):
 
 
             if user.user_type == "seller":
-                return redirect("seller_registration")
+                return redirect("seller_dashboard")
             elif user.user_type == "customer":
                 return redirect("homepage")
             else:
@@ -252,11 +263,4 @@ def logout_user(request):
     logout(request)
     return redirect('homepage')
 
-
-
-# Seller Functions
-
-# seller dashboard
-def seller_dashboard(request):
-    return render(request, "sellerfunction/seller_dashboard.html")
 

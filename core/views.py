@@ -28,3 +28,7 @@ def roomlist(request):
 
 def roomdetail(request):
     return render(request, "core/roomdetail.html")
+
+
+def seller_dashboard(request):
+    return render(request, "seller/seller_dashboard.html")

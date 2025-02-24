@@ -12,9 +12,6 @@ urlpatterns = [
 
     # payment
     path("verify/", views.verify_payment, name="verify_payment"),
-
-    # seller functions
-    path("seller_dashboard/", views.seller_dashboard, name="seller_dashboard"),
     
 
 ]
