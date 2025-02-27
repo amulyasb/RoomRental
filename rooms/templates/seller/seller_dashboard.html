@@ -2,11 +2,7 @@
 {% load static %}
 {% block content %}
 
-<style>
-    .btn-s-dashboard-add-room a:hover {
-        color: white !important;
-    }
-</style>
+
 
             <!-- Main Content -->
             <div class="flex-grow-1 p-4 welcome-content">
@@ -22,7 +18,7 @@
                         <div class="card bg-light text-blackn mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">Total Rooms</h5>
-                                <p class="card-text">20</p>
+                                <p class="card-text">{{seller_total_rooms}}</p>
                             </div>
                         </div>
                     </div>
@@ -60,7 +56,9 @@
 
                 <!-- Listed Products Table -->
                 <h4 class="Listed-Rooms-header fw-bold fs-3">Listed Rooms</h4>
-                <button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold"><a style="color: #2A3855; text-decoration: none;" href="{% url 'add_rooms' %}">Add New Room</a></button>
+                <button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
+                    <a href="{% url 'add_rooms' %}">Add New Room</a>
+                </button>
                 <div class="table-responsive border shadow mb-4">
                     <table class="table table-hover">
                         <thead class="table-head">
@@ -73,26 +71,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for sellerRooms in seller_rooms_table %}
                             <tr>
-                                <td><img src="s1.bmp" class="img-fluid" style="height: 70px; width: 100px;"></td>
-                                <td>2Bhk Flat at Ranipuwa</td>
-                                <td>Pokhara, Ranipuwa</td>
-                                <td>$10000</td>
+                                <td><img src="{{sellerRooms.room_img.url}}" class="img-fluid" style="height: 70px; width: 100px;"></td>
+                                <td>{{sellerRooms.title}}</td>
+                                <td>{{sellerRooms.city}}</td>
+                                <td>रू{{sellerRooms.price}}</td>
                                 <td class="d-flex flex-column">
-                                    <button class="btn btn-sm btn-outline-info">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#updateRoomModal{{ sellerRooms.id }}">Edit</button>
                                     <button class="btn btn-sm btn-outline-danger mt-2">Delete</button>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><img src="s1.bmp" class="img-fluid" style="height: 70px; width: 100px;"></td>
-                                <td>2Bhk Flat at Ranipuwa</td>
-                                <td>Pokhara, Ranipuwa</td>
-                                <td>$10000</td>
-                                <td class="d-flex flex-column">
-                                    <button class="btn btn-sm btn-outline-info">Edit</button>
-                                    <button class="btn btn-sm btn-outline-danger mt-2">Delete</button>
-                                </td>
-                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -198,6 +188,159 @@
                 </div>
             </div>
         </div>
+
+
+
+
+        
+    <!-- Modal for update room -->
+    {% for room in seller_rooms_table %}
+    <div class="modal fade" id="updateRoomModal{{ room.id }}" tabindex="-1" aria-labelledby="updateRoomModalLabel{{ room.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateRoomModalLabel{{ room.id }}">Update Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{% url 'edit_room' room.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <!-- Room Details -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="room_title" class="form-label">Room Title:</label>
+                            <input type="text" class="form-control" id="room_title" name="room_title" value="{{ room.title }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="rent" class="form-label">Rent:</label>
+                            <input type="number" class="form-control" id="rent" name="rent" value="{{ room.price }}">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" name="city" id="city">
+                                        <option value="{{user.room.city}}" disabled selected>Select Your City</option>
+                                        {% for city in cities %}
+                                        <option value="{{ city.city }}">{{ city.city }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="city" class="form-label">City</label>
+                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="desc" class="form-label">Description:</label>
+                            <textarea class="form-control" id="desc" name="desc" rows="1">{{ room.address }}</textarea>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="room_image" class="form-label">Main Image:</label>
+                                <input type="file" class="form-control" id="room_image" name="room_image">
+                                <img src="{{room.room_img.url}}" alt="main_room_image" style="width: 100px; height: 100px; margin-top:5px;">
+                            </div>
+                    </div>
+
+                    <div id="image-upload-container">
+                        <div class="row mb-3">
+                                {% for thumbnail in room.thumbnails.all %}
+                                <div class="col-md-6 my-2">
+                                    <div class="semi-thumb d-flex justify-content-between align-items-center">
+                                        <img src="{{ thumbnail.thumbnail_img.url }}" alt="Room Image" style="width: 100px; height: 100px; margin-top: 5px;">
+                                        <a href="{% url 'delete_thumbnail' thumbnail.id %}" class="btn btn-danger text-center">Delete</a>
+                                    </div>
+                                </div>
+                                
+                                {% empty %}
+                                <p>No additional images.</p>
+                                {% endfor %}
+                            <div class="col-md-12 mt-5" hidden>
+                                <label for="new_thumb_image" class="form-label">Additional Image:</label>
+                                <input type="file" class="form-control" id="new_thumb_image" name="new_thumb_image" multiple>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary mb-3 w-100" id="add-image-button">+ Add Image</button>
+
+                    <div class="row mb-3">
+                        {% for spec in room.specifications.all %}
+                        <div class="col-md-6 my-2">
+                            <label class="form-label">Specification Name:</label>
+                            <input type="text" class="form-control old_spec_name" name="old_spec_name[]" value="{{spec.spec_name}}">
+                        </div>
+                        <div class="col-md-6 my-2">
+                            <label class="form-label">Specification Detail:</label>
+                            <input type="text" class="form-control old_spec_detail" name="old_spec_detail[]" value="{{spec.spec_detail}}">
+                        </div>
+                        {% empty %}
+                        <p>No Specifications of Room.</p>
+                        {% endfor %}
+                    </div>
+
+                    <div id="specifications-container">
+                        <div class="row mb-3 mt-5" hidden>
+                            <div class="col-md-6 my-2">
+                                <label class="form-label">Specification Name:</label>
+                                <input type="text" class="form-control new_spec_name" name="new_spec_name[]">
+                            </div>
+                            <div class="col-md-6 my-2">
+                                <label class="form-label">Specification Detail:</label>
+                                <input type="text" class="form-control new_spec_detail" name="new_spec_detail[]">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary mb-3" id="add-spec-button">+ Add Specification</button>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal for update room -->
+
+    <script>
+        // Add Image Button Functionality
+        document.getElementById('add-image-button').addEventListener('click', function () {
+            const container = document.getElementById('image-upload-container');
+            const imageCount = container.querySelectorAll('input[type="file"]').length;
+
+            const newImageGroup = document.createElement('div');
+            newImageGroup.className = 'mb-3';
+            newImageGroup.innerHTML = `
+            <label for="new_thumb_image_${imageCount + 2}" class="form-label">Additional Image:</label>
+            <input type="file" name="new_thumb_image_${imageCount + 2}" id="new_thumb_image_${imageCount + 2}" class="form-control">
+        `;
+            container.appendChild(newImageGroup);
+        });
+
+        // Add Specification Button Functionality
+        document.getElementById('add-spec-button').addEventListener('click', function () {
+            const container = document.getElementById('specifications-container');
+            const newSpecRow = document.createElement('div');
+            newSpecRow.className = 'row mb-3';
+            newSpecRow.innerHTML = `
+                <div class="col-md-6">
+                    <label class="form-label">Specification Name:</label>
+                    <input type="text" name="new_spec_name[]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Specification Detail:</label>
+                    <input type="text" name="new_spec_detail[]" class="form-control">
+                </div>
+            `;
+            container.appendChild(newSpecRow);
+        });
+    </script>
+
 
 
 {% endblock content %}

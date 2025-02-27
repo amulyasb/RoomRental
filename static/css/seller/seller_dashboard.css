@@ -30,22 +30,37 @@ nav.bg-dark {
 }
 
 
+/* Hover effect for link inside button */
+/* Button style */
 .btn-s-dashboard-add-room {
     color: #2A3855;
     border-radius: 5px;
     background-color: white;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    border: 2px solid #2A3855;
 }
 
-
+/* Hover effect for button */
 .btn-s-dashboard-add-room:hover {
     color: white !important;
-    background-color: #2A3855 !important;
+    background-color: #2A3855;
+    border-color: #2A3855;
 }
 
-.btn-s-dashboard-add-room a:hover {
+/* Style for the link inside the button */
+.btn-s-dashboard-add-room a {
+    color: #2A3855;
+    text-decoration: none;
+    display: block;
+}
+
+/* Hover effect for link inside button */
+.btn-s-dashboard-add-room:hover a {
     color: white !important;
     background-color: #2A3855;
 }
+
 
 @media (max-width: 767px) {
 
@@ -53,4 +68,29 @@ nav.bg-dark {
         margin-left: 0;
         /* Adjust based on sidebar width */
     }
+}
+
+
+/* Message display styling */
+.messages {
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }

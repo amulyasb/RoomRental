@@ -6,8 +6,8 @@ from autoslug import AutoSlugField
 # Create your models here.
 class Room(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Seller_rooms')
-    title = models.CharField(max_length=25)
-    address = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
+    address = models.TextField()
     city = models.ForeignKey(city, on_delete=models.CASCADE, related_name='room_city')
     price = models.IntegerField()
     room_img = models.ImageField(upload_to='img/room_img', default='')
@@ -19,10 +19,10 @@ class Room(models.Model):
         return self.title
     
 class Room_specification(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="specifications")
     spec_name = models.CharField(max_length=50)
     spec_detail = models.CharField(max_length=200)
 
 class Room_thumbnail(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    thumbnail_img = models.ImageField(upload_to="img/rooms_img", default="", null=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="thumbnails")
+    thumbnail_img = models.ImageField(upload_to="img/room_img", default="", null=True)

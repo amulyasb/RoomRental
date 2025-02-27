@@ -20,14 +20,14 @@
         <nav class="bg-dark text-white p-3 vh-100 d-none d-md-block" style="width: 250px;">
             <div class="text-center">
                 <div class="bg-light sidebar-img">
-                    <img src="logo.png" alt="Logo" class="img-fluid p-1" style="height: 70px;">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo" class="img-fluid p-1" style="height: 70px;">
                 </div>
                 <h4 class="mt-2">Seller Dashboard</h4>
             </div>
             <ul class="nav flex-column mt-3">
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_dashboard' %}"><i class="fas fa-home me-2"></i>
                         Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-box me-2"></i>
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}"><i class="fas fa-box me-2"></i>
                         Rooms</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-shopping-cart me-2"></i>
                         Orders</a></li>
