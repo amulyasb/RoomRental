@@ -83,69 +83,21 @@
             <h2 class="text-center mb-5 fw-bold featured-title">Featured Rooms</h2>
 
             <div class="row g-4">
-                <!-- Room 1 -->
+                {% for feature_room_obj in featured_rooms %}
                 <div class="col-md-6 col-lg-3">
                     <div class="card h-100 shadow-sm border-0">
-                        <img src="{% static 'img/room1.webp' %}" class="card-img-top" alt="Deluxe Suite">
+                        <img src="{{feature_room_obj.room_img.url}}" class="card-img-top" alt="Deluxe Suite">
                         <div class="card-body">
-                            <h5 class="card-title fw-bold room-name">Deluxe Suite</h5>
-                            <p class="overflow-hidden text-truncate room-details">Private bathroom • 25m² • WiFi • King
-                                bed</p>
+                            <h5 class="card-title fw-bold room-name">{{feature_room_obj.title}}</h5>
+                            <p class="overflow-hidden text-truncate room-details">{{feature_room_obj.address}}</p>
                             <div class="d-flex justify-content-between align-items-center flex-lg-column">
-                                <span class="h5 mb-0 room-price ">$99/night</span>
+                                <span class="h5 mb-0 room-price ">रू{{feature_room_obj.price}}</span>
                                 <a href="" class="text-decoration-none m-3 btn-primary-custom">Book Now</a>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Room 2 -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="{% static 'img/room2.jpg' %}" class="card-img-top" alt="Executive Studio">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold room-name">Executive Studio</h5>
-                            <p class="overflow-hidden text-truncate room-details">Kitchenette • 30m² • Balcony •
-                                Workspace</p>
-                            <div class="d-flex justify-content-between align-items-center flex-lg-column">
-                                <span class="h5 mb-0 room-price">$129/night</span>
-                                <a href="" class="text-decoration-none m-3 btn-primary-custom">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Room 3 -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="{% static 'img/s1.bmp' %}" class="card-img-top" alt="Cozy Single">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold room-name">Cozy Single</h5>
-                            <p class="overflow-hidden text-truncate room-details">Shared bathroom • 15m² • Desk • Lounge
-                                access</p>
-                            <div class="d-flex justify-content-between align-items-center flex-lg-column">
-                                <span class="h5 mb-0 room-price">$65/night</span>
-                                <a href="" class="text-decoration-none m-3 btn-primary-custom">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Room 4 -->
-                <div class="col-md-6 col-lg-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="{% static 'img/s3.bmp' %}" class="card-img-top" alt="Family Room">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold room-name">Family Room</h5>
-                            <p class="overflow-hidden text-truncate room-details">2 bedrooms • 45m² • Kitchen • Play
-                                area</p>
-                            <div class="d-flex justify-content-between align-items-center flex-lg-column">
-                                <span class="h5 mb-0 room-price">$159/night</span>
-                                <a href="" class="text-decoration-none m-3 btn-primary-custom">Book Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
             <div class="text-center mt-5">
