@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from accounts.models import *
 from payment.models import Subscription, Payment
 import requests
-from django.conf import settings
 from datetime import datetime, timedelta
 import uuid
 import json
@@ -37,6 +36,7 @@ def customer_registration(request):
             if get_user_model().objects.filter(phone=phone).exists():
                 messages.error(request, "Phone Number already taken")
                 return redirect("customer_registration")
+            
             # Check if the email already exists
             if get_user_model().objects.filter(email=email).exists():
                 messages.error(request, "Email already exists!")

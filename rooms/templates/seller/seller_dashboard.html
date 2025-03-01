@@ -8,7 +8,7 @@
             <div class="flex-grow-1 p-4 welcome-content">
                 <div class="seller-dash-header d-flex justify-content-between">
                     <h1 class="welcome-content fw-bold">Welcome, <small class="welcome-content">{% if user.is_authenticated %}{{user.name}}{% else %}..{% endif %}</small></h1>
-                    <a href=""><i class="fas fa-user text-decoration-none welcome-content p-3 fs-5"> &nbsp;
+                    <a href="{% url 'seller_profile'%}"><i class="fas fa-user text-decoration-none welcome-content p-3 fs-5"> &nbsp;
                             {% if user.is_authenticated %} {{user.name}} {% else %} UNKOWN USER {% endif %}</i></a>
                 </div>
 

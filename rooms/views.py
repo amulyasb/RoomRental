@@ -4,6 +4,8 @@ from django.utils import timezone
 from .models import Room, Room_thumbnail, Room_specification
 from accounts.models import User, city
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+
 
 
 
@@ -60,6 +62,71 @@ def seller_rooms(request):
     }
 
     return render(request, "seller/seller_rooms.html", data)
+
+# seller profile
+def seller_profile(request):
+    cities = city.objects.all()
+        
+    return render(request, "seller/seller_profile.html", {'cities': cities})
+
+# update seller profile
+def update_profile_seller(request):
+    if request.method == 'POST':
+        seller_name = request.POST.get("name")
+        seller_email = request.POST.get("email")
+        seller_password = request.POST.get("password")
+        seller_phone = request.POST.get("phone")
+        seller_city = request.POST.get("city")
+        seller_img = request.FILES.get("profile_image")
+        seller_id = request.user.id
+
+        seller = get_user_model().objects.get(id=seller_id)
+
+            
+        # Check if the email already exists
+        if seller_email and seller_email != seller.email and get_user_model().objects.filter(email=seller_email).exclude(id=seller_id).exists(): 
+        #exclude checks for duplicate email in databse exclude remove the user and checks other user 
+            messages.error(request, "Email already exists!")
+            return redirect("seller_profile")
+        
+
+        # Check if phone is changed and already used by another user
+        if seller_phone and seller_phone != seller.phone and get_user_model().objects.filter(phone=seller_phone).exclude(id=seller_id).exists():
+            messages.error(request, "This phone number is already in use by another account.")
+            return redirect('seller_profile')
+
+        # fetch the user
+        seller.name = seller_name
+        seller.email = seller_email
+        seller.phone = seller_phone
+
+        # Update city only if a new city is provided
+        if seller_city:
+            try:
+                seller.city = city.objects.get(city=seller_city)
+            except city.DoesNotExist:
+                messages.error(request, "Invalid City Selected")
+                return redirect("seller_profile")
+
+        # Update profile image if provided
+        if seller_img:
+            seller.user_image = seller_img
+        
+        # Update password only if provided
+        if seller_password:
+            seller.set_password(seller_password)
+            seller.save()
+            messages.success(request, "Profile Updated Succesfully please login again")
+            return redirect("login_user")
+
+        
+        seller.save()
+        messages.success(request, "Profile Updated Succesfully")
+        return redirect("seller_profile")
+    
+    return render(request, "seller/seller_profile.html")
+
+
 
 
 # seller functions
@@ -181,7 +248,7 @@ def delete_thumbnail(request, thumbnail_id):
 
 # for deleting rooms
 def delete_room(request, room_id):
-    seller = User.objects.get(id=request.user.id)
+    seller = get_user_model().objects.get(id=request.user.id)
     rooms = Room.objects.filter(id=room_id, seller=seller)
     if request.method == "POST":
         rooms.delete()

@@ -1,0 +1,137 @@
+{% extends "seller_base/sidebar_base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .sidebar-img {
+        border-radius: 5px;
+    }
+
+    .flex-grow-1 {
+        margin-left: 250px;
+    }
+
+    nav.bg-dark {
+        position: fixed;
+        height: 100vh;
+        width: 250px;
+        overflow-y: auto;
+        background-color: #2A3855 !important;
+    }
+
+    .offcanvas {
+        background-color: #2A3855 !important;
+
+    }
+
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .profile-image {
+        max-width: 150px;
+        border-radius: 20%;
+        object-fit: cover;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-seller-profile-update {
+        background-color:rgb(255, 255, 255);
+        color: #2A3855;
+        border: 2px solid #2A3855;
+        
+
+    }
+
+    .btn-seller-profile-update:hover {
+        background-color: #2A3855;
+        color: white;
+    }
+
+    @media (max-width: 767px) {
+
+        .flex-grow-1 {
+            margin-left: 0;
+            /* Adjust based on sidebar width */
+        }
+    }
+</style>
+
+    <div class="d-flex">
+
+            <div class="container">
+                <div class="profile-container">
+                    <h2 class="mb-4 text-center">User Profile</h2>
+                        <!-- Display messages -->
+                        {% if messages %}
+                        <div class="messages">
+                        {% for message in messages %}
+                            <div class="message {{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                        </div>
+                        {% endif %}
+
+                    <form method="POST" action="{% url 'update_profile_seller' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="seller-profile-img d-flex justify-content-center align-items-center">
+                                    <img src="{{user.user_image.url}}" alt="Profile Image" class="profile-image mb-3">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile_image" class="form-label">Change Profile Image:</label>
+                                    <input type="file" class="form-control" id="profile_image" name="profile_image">
+                                </div>
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="name" class="form-label">Name:</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{user.name}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="form-label">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{user.email}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password" class="form-label">Password:</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Leave empty to keep current password">
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" name="city" id="city">
+                                            <option value="{{user.city}}" disabled selected>{{user.city}}</option>
+                                            {% for city in cities %}
+                                            <option value="{{ city.city }}">{{ city.city }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label for="city" class="form-label">City</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone:</label>
+                                    <input type="number" class="form-control" id="phone" name="phone" value="{{user.phone}}">
+                                </div>
+                                <div class="seller-profile-btn-div">
+                                    <button type="submit" class="btn btn-seller-profile-update fw-bold">Update Profile</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

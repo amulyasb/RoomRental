@@ -15,5 +15,7 @@ urlpatterns = [
     path("editroom/<int:room_id>", views.edit_room, name="edit_room"),
     path('delete_thumbnail/<int:thumbnail_id>/', views.delete_thumbnail, name='delete_thumbnail'),
     path('delete_room/<int:room_id>/', views.delete_room, name="delete_room"),
+    path('seller_profile/', views.seller_profile, name="seller_profile"),
+    path('update_profile_seller/', views.update_profile_seller, name="update_profile_seller"),
 
 ]

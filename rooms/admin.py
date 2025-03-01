@@ -11,14 +11,11 @@ class Room_thumb(admin.TabularInline):
     extra = 1  # Allows adding more thumbnails dynamically
 
 
-# class Add_spec_thumb(admin.ModelAdmin):
-#     inlines = (RoomSpec_Inline, Room_thumb)
-
 # Custom admin for Room model
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('title', 'seller')  # Display room name and seller in the list view
-    search_fields = ('title', 'seller')  # Search by room name and seller email
-    list_filter = ('seller',)  # Filter by seller
+    list_display = ('title', 'seller')
+    search_fields = ('title', 'seller')
+    list_filter = ('seller',)
     ordering = ('title',)
 
     inlines = (RoomSpec_Inline, Room_thumb)
