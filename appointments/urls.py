@@ -6,5 +6,5 @@ from appointments import views
 
 
 urlpatterns = [
-    path('appointment_booking/', views.appointment_booking, name="appointment_booking"),
+    path('send_appointment_request/<int:room_id>/', views.send_appointment_request, name='send_appointment_request'),
 ]

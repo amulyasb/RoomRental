@@ -32,7 +32,12 @@
                         <p class="fw-bold fs-7 m-1">Log in First...</p>
                     {% endif %}
                 </div>
+
                 <div class="col-6 text-white p-2 d-flex justify-content-end main-header">
+                    <a href="" class="header-forcart me-5" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                        <i class="fa fa-bell"></i>
+                        <span class="header-cart-quantity">5</span>
+                    </a>
                     <a href="#" class="text-white text-decoration-none">
                         {% if user.is_authenticated %}
                             {% if user.name %}
@@ -87,3 +92,28 @@
             </div>
         </nav>
         <!-- Navbar section -->
+
+
+
+        <!-- Notification Modal -->
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Notifications</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                            <p> You have registerd successfully</p>
+                            <p> You have Logined successfully</p>
+                            <p>No new notifications</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Mark as Read</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>

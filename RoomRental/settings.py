@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'payment',
     'rooms',
     'appointments',
+    'notifications'
 ]
 
 MIDDLEWARE = [

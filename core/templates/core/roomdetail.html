@@ -112,7 +112,7 @@
     
                 <div class="modal-body py-4">
                     <!-- Appointment Form -->
-                    <form action="" method="POST">
+                    <form action="{% url 'send_appointment_request' room_detail.id %}" method="POST">
                         {% csrf_token %}
                         <div class="row g-4">
                             <!-- Date Picker -->
