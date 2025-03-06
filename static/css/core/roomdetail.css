@@ -40,26 +40,6 @@
     transition: max-height 0.5s ease;
 }
 
-.more-text {
-    display: none;
-}
-
-#toggleDescription:checked~.description {
-    max-height: none;
-}
-
-#toggleDescription:checked~.description .more-text {
-    display: inline;
-}
-
-#toggleDescription:checked~label::after {
-    content: 'View Less';
-}
-
-label::after {
-    content: 'View More';
-}
-
 /* room deatil main content */
 
 
@@ -133,6 +113,39 @@ label::after {
     background-color: white;
     color: #2A3855;
 }
+
+.more-text {
+    display: none;
+}
+
+#toggleDescription:checked~.description .short-text {
+    display: none;
+}
+
+#toggleDescription:checked~.description .more-text {
+    display: inline;
+}
+
+#toggleDescription:checked~.toggle-btn::after {
+    content: " Show Less";
+}
+
+.toggle-btn::after {
+    content: " Show More";
+}
+
+.appointmentModal-btn {
+    background-color: #2A3855;
+    color: #fff;
+}
+
+.appointmentModal-btn:hover {
+    background-color: white;
+    color: #2A3855;
+    border: 1px solid #2A3855;
+}
+
+
 
 /*  buttons */
 

@@ -92,7 +92,7 @@
                             <p class="overflow-hidden text-truncate room-details">{{feature_room_obj.address}}</p>
                             <div class="d-flex justify-content-between align-items-center flex-lg-column">
                                 <span class="h5 mb-0 room-price ">रू{{feature_room_obj.price}}</span>
-                                <a href="" class="text-decoration-none m-3 btn-primary-custom">Book Now</a>
+                                <a href="{% url 'roomdetail' feature_room_obj.room_slug %}" class="text-decoration-none m-3 btn-primary-custom">View Details</a>
                             </div>
                         </div>
                     </div>

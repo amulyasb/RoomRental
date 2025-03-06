@@ -9,10 +9,10 @@
                 <div class="card shadow">
                     <!-- Room Image -->
                     <div class="position-relative">
-                        <img src="{% static 'img/room1.webp' %}" class="room-detail-img" alt="Room Image">
+                        <img src="{{room_detail.room_img.url}}" class="room-detail-img" alt="Room Image">
                         <!-- Price Tag Overlay -->
                         <div class="position-absolute bottom-0 start-0 text-white p-3 rounded-tr price-ab">
-                            <h3 class="mb-0">$99<span class="fs-6">/night</span></h3>
+                            <h3 class="mb-0">${{room_detail.price}}<span class="fs-6">/month</span></h3>
                         </div>
                     </div>
 
@@ -20,21 +20,19 @@
                     <div class="card-body p-4">
                         <!-- Title and Address -->
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h2 class="card-title mb-0">Deluxe Suite</h2>
+                            <h2 class="card-title mb-0">{{room_detail.title}}</h2>
                         </div>
                         <p class="card-text text-muted mb-4">
-                            <i class="fas fa-map-marker-alt me-2"></i>123 Main Street, Cityville
+                            <i class="fas fa-map-marker-alt me-2"></i>{{room_detail.city}}
                         </p>
 
                         <!-- Description -->
                         <div class="card-text mb-4">
                             <input type="checkbox" id="toggleDescription" class="d-none">
                             <p class="text-muted mb-2 description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dignissim enim at
-                                risus dignissim,
-                                sed volutpat nulla pulvinar.
+                                {{ room_detail.address|slice:":100" }}{% if room_detail.address|length > 100 %}...{% endif %}
                                 <span class="more-text">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quidem, incidunt.
+                                    {{ room_detail.address|slice:"100:" }}
                                 </span>
                             </p>
                             <label for="toggleDescription" class="text-primary text-decoration-none"
@@ -46,7 +44,7 @@
                             <button class="room-detail-btn w-100 w-md-50 py-2 fs-5 fw-semibold">
                                 <i class="fas fa-calendar-check me-2"></i>Chat with Seller
                             </button>
-                            <button class="room-detail-btn w-100 w-md-50 py-2 fs-5 fw-semibold">
+                            <button class="room-detail-btn w-100 w-md-50 py-2 fs-5 fw-semibold" data-bs-toggle="modal" data-bs-target="#appointmentModal">
                                 <i class="fas fa-calendar-check me-2"></i>Book Appoinment
                             </button>
                         </div>
@@ -57,11 +55,11 @@
             <!-- Seller Box -->
             <div class="col-lg-3 col-md-4">
                 <div class="card p-3 text-center">
-                    <img src="{% static 'img/man.webp' %}" class="card-img-top rounded-circle mx-auto mt-3 seller-img" alt="Seller Image">
+                    <img src="{{seller.user_image.url}}" class="card-img-top rounded-circle mx-auto mt-3 seller-img" alt="Seller Image">
                     <div class="card-body">
-                        <h4 class="card-title fs-5">John Doe</h4>
+                        <h4 class="card-title fs-5">{{seller.name}}</h4>
                         <p class="card-text fs-6 text-muted">Trusted Seller</p>
-                        <p class="card-text fs-6 text-muted">Date Joined: <br>2024-4-12</p>
+                        <p class="card-text fs-6 text-muted">Date Joined: <br>{{ seller.date_joined|date:"Y-m-d" }}</p>
                         <button class="room-deatil-seller-btn w-100 fs-5 fw-semibold">Seller Profile</button>
                     </div>
                 </div>
@@ -73,18 +71,11 @@
     <div class="container my-5">
         <h2 class="text-center mb-2">Room Views</h2>
         <div class="row">
+            {% for thumbnail in room_thumbnails %}
             <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center mt-4">
-                <img src="{% static 'img/s1.bmp' %}" alt="Room View" class="img-fluid gallery-thumb">
-            </div>            
-            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-item-center mt-4">
-                <img src="{% static 'img/room1.webp' %}" alt="Room View" class="img-fluid gallery-thumb">
-            </div>
-            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-item-center mt-4">
-                <img src="{% static 'img/s4.bmp' %}" alt="Room View" class="img-fluid gallery-thumb">
-            </div>
-            <div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-item-center mt-4">
-                <img src="{% static 'img/s3.bmp' %}" alt="Room View" class="img-fluid gallery-thumb">
-            </div>
+                <img src="{{thumbnail.thumbnail_img.url}}" alt="Room View" class="img-fluid gallery-thumb">
+            </div> 
+            {% endfor %}                     
         </div>
     </div>
 
@@ -95,18 +86,64 @@
             <div class="row">
                 <div class="col-12">
                     <ul class="spec-list">
-                        <li><strong>Wifi:</strong> No</li>
-                        <li><strong>AC:</strong> Yes</li>
-                        <li><strong>TV:</strong> Yes</li>
-                        <li><strong>Parking:</strong> Available</li>
-                        <li><strong>Breakfast:</strong> Included</li>
-                        <li><strong>Pet Friendly:</strong> No</li>
-                        <li><strong>Pool:</strong> Yes</li>
-                        <li><strong>Gym:</strong> No</li>
+                        {% for spec in room_specifications %}
+                        <li><strong>{{spec.spec_name}}:</strong> {{spec.spec_detail}}</li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <div class="w-100">
+                        <h5 class="modal-title fs-5 text-center fw-bold mb-2" id="appointmentModalLabel">Appointment Scheduling</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="modal-title fs-4 mb-0">{{room_detail.title}}</h3>
+                            <p class="text-end mb-0 mt-2"><i class="fa fa-user"></i> Ram Adhikari</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+    
+                <div class="modal-body py-4">
+                    <!-- Appointment Form -->
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="row g-4">
+                            <!-- Date Picker -->
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="appointment_date" class="form-label">Select Date</label>
+                                    <input type="date" class="form-control" id="appointment_date" name="appointment_date" required>
+                                </div>
+                            </div>
+    
+                            <!-- Time Picker -->
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="appointment_time" class="form-label">Select Time</label>
+                                    <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
+                                </div>
+                            </div>
+    
+                            <!-- Submit Button -->
+                            <div class="col-12">
+                                <button type="submit" class="btn appointmentModal-btn w-100 py-2 fs-5 fw-semibold">
+                                    <i class="fas fa-calendar-check me-2"></i>Send Appointment Request
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
 
 {% endblock content %}

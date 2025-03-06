@@ -36,8 +36,20 @@ def roomlist(request):
     }
     return render(request, "core/roomlist.html", data)
 
-def roomdetail(request):
-    return render(request, "core/roomdetail.html")
+def roomdetail(request,slug):
+    room_detail = Room.objects.get(room_slug = slug)
+    room_specifications = Room_specification.objects.filter(room=room_detail)
+    room_thumbnails = Room_thumbnail.objects.filter(room=room_detail)
+    seller = room_detail.seller
+
+    data = {
+        "room_detail": room_detail,
+        "room_specifications": room_specifications,
+        "room_thumbnails": room_thumbnails,
+        "seller": seller,
+    }
+
+    return render(request, "core/roomdetail.html", data)
 
 
 
