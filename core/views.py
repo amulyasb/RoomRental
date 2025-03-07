@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from accounts.models import *
 from rooms.models import *
+from notifications.models import *
+from appointments.models import *
 
 # Create your views here.
 
@@ -41,6 +43,9 @@ def roomdetail(request,slug):
     room_specifications = Room_specification.objects.filter(room=room_detail)
     room_thumbnails = Room_thumbnail.objects.filter(room=room_detail)
     seller = room_detail.seller
+    
+    # Delete expired notifications
+    Notification.delete_old_notifications()
 
     data = {
         "room_detail": room_detail,
