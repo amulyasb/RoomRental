@@ -19,11 +19,6 @@
             background-color: #2A3855 !important;
         }
 
-        .flex-grow-1 {
-            margin-left: 250px;
-            /* Adjust based on sidebar width */
-        }
-
         .table-head th {
             background-color: #2A3855 !important;
             color: white;
@@ -52,25 +47,7 @@
             }
         }
     </style>
-    <div class="flex-grow mb-4 welcome-content">
-        <div class="seller-dash-header d-flex justify-content-between">
-            <h1 class="welcome-content fw-bold">Welcome, <small class="welcome-content">
-                {% if user.is_authenticated %}
-                {{user.name | upper}}
-                {% else %}
-                ...
-                {% endif %}
-            </small></h1>
-
-            {% if user.is_authenticated %}
-            <a href="#"><i class="fas fa-user text-decoration-none welcome-content p-3 fs-5"> 
-                &nbsp; {{ user.name | upper }}
-            </i></a>
-            {% endif %}
-        
-        </div>
-        <p>Here, are your All listed rooms</p>
-    </div>
+    
     <!-- Display messages -->
     {% if messages %}
         <div class="messages">

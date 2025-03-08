@@ -1,13 +1,21 @@
 from django.shortcuts import render, redirect
 from accounts.models import *
+from notifications.models import *
+from appointments.models import *
 from django.utils import timezone
 from .models import Room, Room_thumbnail, Room_specification
 from accounts.models import User, city
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
+# notification handler
+def seller_mark_notifications_as_read(request):
+    if request.user.is_authenticated:
+        # Update notifications for the logged-in user
+        notifications = Notification.objects.filter(user=request.user, is_read=False)
+        notifications.update(is_read=True)  # Mark all as read
 
-
+    return redirect('seller_dashboard') 
 
 # seller dashboard
 def seller_dashboard(request):
@@ -25,11 +33,30 @@ def seller_dashboard(request):
             if subscription_remaning_days < 0:
                 subscription_remaning_days = 0
 
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+
         # for fetching rooms in room table
         seller_rooms_table = Room.objects.filter(seller=user).order_by("-id")[:2]
 
         # for total added rooms of seller in frontend
         seller_total_rooms = Room.objects.filter(seller=user).count()
+
+        # Fetch appointment requests for the seller
+        appointment_requests = Appointment.objects.filter(seller=user, status='hold').order_by('-date')
+
+        # Total appointments requests
+        total_appointment_requests = appointment_requests.count()
+
+        # Fetch pending appointments (accepted but not completed)
+        pending_appointments = Appointment.objects.filter(seller=user, status='accepted').order_by('-date')
+
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
         
 
     data = {
@@ -38,6 +65,12 @@ def seller_dashboard(request):
         'subscription_remaning_days': subscription_remaning_days,
         'seller_rooms_table':seller_rooms_table,
         'seller_total_rooms': seller_total_rooms,
+        'notifications': notifications,
+        'unread_notifications_count':unread_notifications_count,
+        'appointment_requests': appointment_requests,
+        'pending_appointments': pending_appointments,
+        'total_appointment_requests': total_appointment_requests,
+
 
     }
     return render(request, "seller/seller_dashboard.html", data)

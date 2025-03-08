@@ -10,5 +10,8 @@ urlpatterns = [
     path("roomlist/", views.roomlist, name="roomlist"),
     path("roomdetail/<slug>", views.roomdetail, name="roomdetail"),
 
+    # notification hanlder
+    path('customer_mark_notifications_as_read/', views.customer_mark_notifications_as_read, name="customer_mark_notifications_as_read"),
+
 
 ]

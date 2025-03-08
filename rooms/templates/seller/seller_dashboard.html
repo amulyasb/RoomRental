@@ -2,13 +2,7 @@
 {% load static %}
 {% block content %}
 
-            <!-- Main Content -->
-            <div class="flex-grow-1 p-4 welcome-content">
-                <div class="seller-dash-header d-flex justify-content-between">
-                    <h1 class="welcome-content fw-bold">Welcome, <small class="welcome-content">{% if user.is_authenticated %}{{user.name}}{% else %}..{% endif %}</small></h1>
-                    <a href="{% url 'seller_profile'%}"><i class="fas fa-user text-decoration-none welcome-content p-3 fs-5"> &nbsp;
-                            {% if user.is_authenticated %} {{user.name}} {% else %} UNKOWN USER {% endif %}</i></a>
-                </div>
+
 
                 <!-- Dashboard Overview -->
                 <div class="row my-4">
@@ -92,7 +86,7 @@
                         <div class="card bg-light text-black  mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">Appoinment Requests</h5>
-                                <p class="card-text">20</p>
+                                <p class="card-text">{{total_appointment_requests}}</p>
                             </div>
                         </div>
                     </div>
@@ -121,25 +115,18 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for appointment in appointment_requests %}
                                 <tr class="border-2">
-                                    <td>Aayush Kandel</td>
-                                    <td>98002654</td>
-                                    <td>2025-5-3</td>
-                                    <td>4:00pm</td>
+                                    <td>{{ appointment.customer.name }}</td>
+                                    <td>{{ appointment.customer.phone }}</td>
+                                    <td>{{ appointment.date }}</td>
+                                    <td>{{ appointment.time }}</td>
                                     <td class="d-flex flex-column">
                                         <button class="btn btn-sm btn-outline-info">Accept</button>
                                         <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
                                     </td>
                                 </tr>
-                                <tr class="border-2">
-                                    <td>Nayan Karki</td>
-                                    <td>98556420</td>
-                                    <td>2025-5-8</td>
-                                    <td>1:00pm</td>
-                                    <td class="d-flex flex-column">
-                                        <button class="btn btn-sm btn-outline-info">Accept</button>
-                                        <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
-                                    </td>
+                                {% endfor %}
                                 </tr>
                             </tbody>
                         </table>

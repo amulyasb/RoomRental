@@ -62,47 +62,20 @@ html {
 /* navbar */
 
 /* header */
-/* Icon styling */
-.header i {
-    margin-right: 10px;
-    font-size: 1.3rem;
-    color: #3dc3c8;
-    vertical-align: middle;
-    /* Align icon with text */
+.main-header .cust-fa-bell {
+    color: #fdfeff !important;
 }
 
-/* Header span styling */
-.header-span {
-    font-size: 1rem;
-    color: #3dc3c8;
-    padding-left: 1.5px;
-    /* margin-left: 2px; */
-}
-
-.header-forcart,
-.header-forlogout,
-.header-forname {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-    margin-left: 20px;
-    transition: color 0.3s ease;
-    display: flex;
-    align-items: center;
-}
-
-.header-forcart {
-    margin-left: 20px;
-}
-
-.header-forcart {
+.header-fornotification {
     position: relative;
     display: inline-block;
     color: #fff;
     font-size: 16px;
+    margin-right: 50px;
+
 }
 
-.header-cart-quantity {
+.header-notification-quantity {
     position: absolute;
     top: -8px;
     left: 18px;

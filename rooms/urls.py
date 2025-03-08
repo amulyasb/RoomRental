@@ -18,4 +18,8 @@ urlpatterns = [
     path('seller_profile/', views.seller_profile, name="seller_profile"),
     path('update_profile_seller/', views.update_profile_seller, name="update_profile_seller"),
 
+    # notification handler
+    path('seller_mark-notifications-as-read/', views.seller_mark_notifications_as_read, name='seller_mark_notifications_as_read'),
+
+
 ]

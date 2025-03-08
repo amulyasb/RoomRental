@@ -5,12 +5,28 @@ from notifications.models import *
 from appointments.models import *
 
 # Create your views here.
+# notification handler
+def customer_mark_notifications_as_read(request):
+    if request.user.is_authenticated:
+        # Update notifications for the logged-in user
+        notifications = Notification.objects.filter(user=request.user, is_read=False)
+        notifications.update(is_read=True)  # Mark all as read
+
+    return redirect('homepage') 
+
 
 def homepage(request):
     how_it_work_section = request.GET.get('type', 'customerSection')  # Default to 'customerSection'
     cities = city.objects.all()
     user = None
+    notifications = None
+    unread_notifications_count = None
+
+    # fetch featured room section
     featured_rooms = Room.objects.all().order_by("-id")[:4]
+
+    # Delete expired notifications
+    Notification.delete_old_notifications()
 
 
     if request.user.is_authenticated:
@@ -19,7 +35,11 @@ def homepage(request):
         if request.user.user_type != 'customer':  
             return redirect('login_user')
         
-        featured_rooms = Room.objects.all().order_by("-id")[:4]
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
 
 
     data = {
@@ -27,6 +47,8 @@ def homepage(request):
         'user': user,
         'cities': cities,
         'featured_rooms': featured_rooms,
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
     }
     return render(request, "core/homepage.html", data)
 
