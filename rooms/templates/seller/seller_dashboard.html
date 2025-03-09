@@ -122,7 +122,10 @@
                                     <td>{{ appointment.date }}</td>
                                     <td>{{ appointment.time }}</td>
                                     <td class="d-flex flex-column">
-                                        <button class="btn btn-sm btn-outline-info">Accept</button>
+                                        <form method="POST" action="{% url 'approve_appointment_request' appointment.id %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-sm btn-outline-info w-100" type="submit">Accept</button>
+                                        </form>
                                         <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
                                     </td>
                                 </tr>

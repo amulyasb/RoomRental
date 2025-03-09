@@ -6,8 +6,7 @@ from django.utils import timezone
 from datetime import timedelta
 
 
-# Create your views here.
-
+# customer appointment view
 def send_appointment_request(request, room_id):
     if request.method == 'POST':
         room = Room.objects.get(id=room_id)
@@ -18,7 +17,7 @@ def send_appointment_request(request, room_id):
         # Delete expired notifications
         Notification.delete_old_notifications()
 
-        # Create a new appointment request
+        # Creating a new appointment request
         appointment = Appointment.objects.create(
             room=room,
             customer=request.user,
@@ -28,11 +27,36 @@ def send_appointment_request(request, room_id):
             status='hold'
         )
 
-        # Create a notification for the seller with auto-delete after 30 days
         Notification.objects.create(
             user=seller,
             message=f"New appointment request from {request.user.name} for {room.title}.",
             expires_at=timezone.now() + timedelta(minutes=2)
         )
         return redirect('roomdetail', slug=room.room_slug)
+    
+
+# seller appointment management
+def approve_appointment_request(request, appointment_id):        
+    if request.method == "POST":
+        appointment = Appointment.objects.get(id=appointment_id)
+        print(f"Appointment found: {appointment}")  # Debugging
+
+
+        # ensuring only the seller can approve
+        if appointment.seller == request.user:
+            print("Seller is authorized")  # Debugging
+
+            appointment.status = 'pending'
+            appointment.save()
+
+            print(f"Status updated to {appointment.status}")  # Debugging
+
+
+            # create notification to the customer 
+            Notification.objects.create(
+                user = appointment.customer,
+                message=f"Your appointment request for {appointment.room.title} has been approved by {appointment.seller.name}.",
+                expires_at=timezone.now() + timedelta(minutes=2)
+            )
+            return redirect("seller_dashboard")
 

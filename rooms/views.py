@@ -43,7 +43,7 @@ def seller_dashboard(request):
         seller_total_rooms = Room.objects.filter(seller=user).count()
 
         # Fetch appointment requests for the seller
-        appointment_requests = Appointment.objects.filter(seller=user, status='hold').order_by('-date')
+        appointment_requests = Appointment.objects.filter(seller=user, status='hold').order_by('date')[:2]
 
         # Total appointments requests
         total_appointment_requests = appointment_requests.count()
@@ -57,8 +57,6 @@ def seller_dashboard(request):
         # Count unread notifications
         unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
 
-        
-
     data = {
         'user': user,
         'cities': cities,
@@ -70,8 +68,6 @@ def seller_dashboard(request):
         'appointment_requests': appointment_requests,
         'pending_appointments': pending_appointments,
         'total_appointment_requests': total_appointment_requests,
-
-
     }
     return render(request, "seller/seller_dashboard.html", data)
 
