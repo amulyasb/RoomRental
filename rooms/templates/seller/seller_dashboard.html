@@ -19,17 +19,18 @@
                             <div class="card-body">
                                 <h5 class="card-title">Subscription Status</h5>
                                 {% if user.is_authenticated %}
-                                    {% if user.is_subscribed %}
-                                    <p class="card-text text-success">
-                                        Active
-                                    </p>
-                                    {% else%}
-                                    <p class="card-text text-danger">
-                                        Inactive
-                                    </p>
-                                    {% endif%}
+                                    {% if subscription_remaning_days > 0 %}
+                                        <p class="card-text text-success">
+                                            Active
+                                        </p>
+                                    {% elif subscription_remaning_days == 0 %}
+                                        <p class="card-text text-danger">
+                                            Inactive
+                                        </p>
+                                    {% endif %}
                                 {% endif %}
                             </div>
+                            
                         </div>
                     </div>
                     <div class="col-md-4 border-2">
@@ -126,7 +127,10 @@
                                             {% csrf_token %}
                                             <button class="btn btn-sm btn-outline-info w-100" type="submit">Accept</button>
                                         </form>
-                                        <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
+                                        <form method="POST" action="{% url 'reject_appointment_request' appointment.id %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-sm btn-outline-danger mt-2 w-100" type="submit">Reject</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 {% endfor %}

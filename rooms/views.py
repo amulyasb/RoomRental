@@ -36,6 +36,11 @@ def seller_dashboard(request):
         # Delete expired notifications
         Notification.delete_old_notifications()
 
+        # Delete rejected notification
+        appointments = Appointment.objects.filter(seller=user, status='rejected')
+        for appointment in appointments:
+            appointment.delete_rejected_appointments()  
+
         # for fetching rooms in room table
         seller_rooms_table = Room.objects.filter(seller=user).order_by("-id")[:2]
 

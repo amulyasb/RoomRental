@@ -7,7 +7,7 @@ class AppointmentAdmin(admin.ModelAdmin):
     search_fields = ('customer__name', 'seller__name', 'room__name')
     ordering = ('-created_at',)
     list_editable = ('status',)
-    readonly_fields = ('created_at',)
+    readonly_fields = ('created_at','rejected_at')
 
     fieldsets = (
         ('Basic Information', {
@@ -17,7 +17,7 @@ class AppointmentAdmin(admin.ModelAdmin):
             'fields': ('date', 'time', 'status')
         }),
         ('Metadata', {
-            'fields': ('created_at',),
+            'fields': ('created_at','rejected_at'),
             'classes': ('collapse',),
         }),
     )
