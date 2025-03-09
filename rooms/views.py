@@ -54,7 +54,7 @@ def seller_dashboard(request):
         total_appointment_requests = appointment_requests.count()
 
         # Fetch pending appointments (accepted but not completed)
-        pending_appointments = Appointment.objects.filter(seller=user, status='accepted').order_by('-date')
+        pending_appointments = Appointment.objects.filter(seller=user, status='pending').order_by('date')
 
         # Fetch notifications for the seller
         notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')

@@ -64,18 +64,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for sellerRooms in seller_rooms_table %}
-                            <tr>
-                                <td><img src="{{sellerRooms.room_img.url}}" class="img-fluid" style="height: 70px; width: 100px;"></td>
-                                <td>{{sellerRooms.title}}</td>
-                                <td>{{sellerRooms.city}}</td>
-                                <td>रू{{sellerRooms.price}}</td>
-                                <td class="d-flex flex-column">
-                                    <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#updateRoomModal{{ sellerRooms.id }}">Edit</button>
-                                    <button class="btn btn-sm btn-outline-danger mt-2">Delete</button>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                            {% if seller_rooms_table %}
+                                {% for sellerRooms in seller_rooms_table %}
+                                <tr>
+                                    <td><img src="{{sellerRooms.room_img.url}}" class="img-fluid" style="height: 70px; width: 100px;"></td>
+                                    <td>{{sellerRooms.title}}</td>
+                                    <td>{{sellerRooms.city}}</td>
+                                    <td>रू{{sellerRooms.price}}</td>
+                                    <td class="d-flex flex-column">
+                                        <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#updateRoomModal{{ sellerRooms.id }}">Edit</button>
+                                        <button class="btn btn-sm btn-outline-danger mt-2">Delete</button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <p class="text-muted">No Requests</p>
+                                    </td>
+                                </tr>  
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
@@ -116,24 +124,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for appointment in appointment_requests %}
-                                <tr class="border-2">
-                                    <td>{{ appointment.customer.name }}</td>
-                                    <td>{{ appointment.customer.phone }}</td>
-                                    <td>{{ appointment.date }}</td>
-                                    <td>{{ appointment.time }}</td>
-                                    <td class="d-flex flex-column">
-                                        <form method="POST" action="{% url 'approve_appointment_request' appointment.id %}">
-                                            {% csrf_token %}
-                                            <button class="btn btn-sm btn-outline-info w-100" type="submit">Accept</button>
-                                        </form>
-                                        <form method="POST" action="{% url 'reject_appointment_request' appointment.id %}">
-                                            {% csrf_token %}
-                                            <button class="btn btn-sm btn-outline-danger mt-2 w-100" type="submit">Reject</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                {% endfor %}
+                                {% if appointment_requests%}
+                                    {% for appointment in appointment_requests %}
+                                    <tr class="border-2">
+                                        <td>{{ appointment.customer.name }}</td>
+                                        <td>{{ appointment.customer.phone }}</td>
+                                        <td>{{ appointment.date }}</td>
+                                        <td>{{ appointment.time }}</td>
+                                        <td class="d-flex flex-column">
+                                            <form method="POST" action="{% url 'approve_appointment_request' appointment.id %}">
+                                                {% csrf_token %}
+                                                <button class="btn btn-sm btn-outline-info w-100" type="submit">Accept</button>
+                                            </form>
+                                            <form method="POST" action="{% url 'reject_appointment_request' appointment.id %}">
+                                                {% csrf_token %}
+                                                <button class="btn btn-sm btn-outline-danger mt-2 w-100" type="submit">Reject</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <p class="text-muted">No Appointment Requests</p>
+                                        </td>
+                                    </tr>                                
+                                {% endif %}
                                 </tr>
                             </tbody>
                         </table>
@@ -154,26 +170,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-2">
-                                    <td>Aayush Kandel</td>
-                                    <td>98002654</td>
-                                    <td>2025-5-3</td>
-                                    <td>4:00pm</td>
-                                    <td class="d-flex flex-column">
-                                        <button class="btn btn-sm btn-outline-success">Done</button>
-                                        <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
-                                    </td>
-                                </tr>
-                                <tr class="border-2">
-                                    <td>Nayan Karki</td>
-                                    <td>98556420</td>
-                                    <td>2025-5-8</td>
-                                    <td>1:00pm</td>
-                                    <td class="d-flex flex-column">
-                                        <button class="btn btn-sm btn-outline-success">Done</button>
-                                        <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
-                                    </td>
-                                </tr>
+                                {% if pending_appointments %}
+                                    {% for appointment in pending_appointments %}
+                                    <tr class="border-2">
+                                        <td>{{appointment.customer.name}}</td>
+                                        <td>{{appointment.customer.phone}}</td>
+                                        <td>{{appointment.date}}</td>
+                                        <td>{{appointment.date}}</td>
+                                        <td class="d-flex flex-column">
+                                            <button class="btn btn-sm btn-outline-success">Done</button>
+                                            <button class="btn btn-sm btn-outline-danger mt-2">Cancel</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <p class="text-muted">No Pending Appointment</p>
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>

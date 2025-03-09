@@ -28,6 +28,11 @@ def homepage(request):
     # Delete expired notifications
     Notification.delete_old_notifications()
 
+    # Delete rejected notification
+    appointments = Appointment.objects.filter(customer=user, status='rejected')
+    for appointment in appointments:
+            appointment.delete_rejected_appointments()  
+
 
     if request.user.is_authenticated:
         user = request.user

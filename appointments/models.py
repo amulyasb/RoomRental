@@ -21,10 +21,9 @@ class Appointment(models.Model):
     rejected_at = models.DateTimeField(null=True, blank=True)
 
     def delete_rejected_appointments(self):
-        # Check if the appointment is rejected and the rejection time is more than 2 minutes ago
+        # Check if the appointment is rejected
         if self.status == 'rejected' and self.rejected_at:
             time_limit = self.rejected_at + timedelta(minutes=10)
-            # If the current time is more than 2 minutes after rejection, delete the appointment
             if timezone.now() > time_limit:
                 self.delete() 
 
