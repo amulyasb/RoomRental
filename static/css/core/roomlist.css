@@ -15,6 +15,42 @@
     color: white;
 }
 
+.pagination {
+    margin-top: 15px;
+    padding: 10px;
+    display: flex;
+    margin: 5px;
+    justify-content: center;
+    gap: 8px;
+}
+
+.pagination .page-item .page-link {
+    color: #2A3855;
+    background-color: #fff;
+    border: 1.5px solid #2A3855;
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-item .page-link:hover {
+    background-color: #2A3855;
+    color: white;
+    border-color: #2A3855;
+    box-shadow: 0 3px 5px rgba(42, 56, 85, 0.3);
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+
 /* Responsive carousel */
 
 @media (max-width: 1086px) and (min-width: 768px) {

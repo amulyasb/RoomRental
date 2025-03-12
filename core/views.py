@@ -3,6 +3,8 @@ from accounts.models import *
 from rooms.models import *
 from notifications.models import *
 from appointments.models import *
+from django.core.paginator import Paginator
+
 
 # Create your views here.
 # notification handler
@@ -60,8 +62,23 @@ def homepage(request):
 def roomlist(request):
     cities = city.objects.all()
 
+    if request.user.is_authenticated:
+        user = request.user
+        # Check if the user is not a customer
+        if request.user.user_type != 'customer':  
+            return redirect('login_user')
+        # fetch featured room section
+        all_rooms = Room.objects.all().order_by("-id")
+        paginator = Paginator(all_rooms, 12)
+
+        page_number = request.GET.get("page") 
+        all_rooms = paginator.get_page(page_number)
+
+
     data={
         'cities':cities,
+        'all_rooms': all_rooms,
+        'user': user,
     }
     return render(request, "core/roomlist.html", data)
 
