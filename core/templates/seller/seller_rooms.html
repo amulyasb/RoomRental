@@ -1,4 +1,4 @@
-{% extends "seller_base/sidebar_base.html" %}
+{% extends "base/sidebar_base.html" %}
 {% load static %}
 {% block content %}
 
@@ -88,6 +88,7 @@
                     </td>
                 </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
     </div>
@@ -237,6 +238,11 @@
         </div>
     </div>
     {% endfor %}
+        <!-- Check if the modal query parameter is present and open the respective modal -->
+    {% if request.GET.modal == 'open' and request.GET.room_id %}
+        <!-- Use an invisible link to automatically open the modal -->
+        <a href="#updateRoomModal{{ request.GET.room_id }}" data-bs-toggle="modal" style="display:none;"></a>
+    {% endif %}
 
     <!-- Modal for update room -->
 

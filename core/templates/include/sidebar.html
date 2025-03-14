@@ -60,7 +60,7 @@
                         Dashboard</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}"><i class="fas fa-bed me-2"></i>
                         Rooms</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#"><i class="far fa-calendar-check me-2"></i>
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}"><i class="far fa-calendar-check me-2"></i>
                         Appointments</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_profile'%}"><i class="fas fa-user me-2"></i>
                         Profile</a></li>
@@ -86,9 +86,9 @@
                     <ul class="nav flex-column">
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_dashboard' %}"><i class="fas fa-home me-2"></i>Dashboard</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}"><i class="fas fa-bed me-2"></i>Rooms</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="far fa-calendar-check me-2"></i> Appointments</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}"><i class="far fa-calendar-check me-2"></i> Appointments</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_profile'%}"><i class="fas fa-user me-2"></i> Profile</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{% url 'logout_user' %}"><i class="fas fa-cog me-2"></i>Logout</a></li>
                     </ul>
                 </div>
             </div>

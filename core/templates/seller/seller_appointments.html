@@ -1,0 +1,143 @@
+{% extends "base/sidebar_base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Appoinment Requests -->
+<div class="row">
+    <div class="my-4">
+        <h4 class="Listed-Rooms-header fw-bold fs-3">Appoinment Requests</h4>
+        <div class="table-responsive border shadow">
+            <table class="table table-hover border-2">
+                <thead class="table-head">
+                    <tr class="border-2">
+                        <th>Client</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if appointment_requests%}
+                    {% for appointment in appointment_requests %}
+                    <tr class="border-2">
+                        <td>{{appointment.customer.name|upper}}</td>
+                        <td>{{ appointment.customer.phone }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td class="d-flex flex-column">
+                            <form method="POST" action="{% url 'approve_appointment_request' appointment.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-info w-100" type="submit">Accept</button>
+                            </form>
+                            <form method="POST" action="{% url 'reject_appointment_request' appointment.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-danger mt-2 w-100" type="submit">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <p class="text-muted">No Appointment Requests</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Pending Appoinment -->
+    <div class="my-5">
+        <h4 class="Listed-Rooms-header fw-bold fs-3">Pending Appoinments</h4>
+        <div class="table-responsive border shadow">
+            <table class="table table-hover border-2">
+                <thead class="table-head">
+                    <tr class="border-2">
+                        <th>Client</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pending_appointments %}
+                    {% for appointment in pending_appointments %}
+                    <tr class="border-2">
+                        <td>{{appointment.customer.name|upper}}</td>
+                        <td>{{appointment.customer.phone}}</td>
+                        <td>{{appointment.date}}</td>
+                        <td>{{appointment.date}}</td>
+                        <td class="d-flex flex-column">
+                            <form method="POST" action="{% url 'finished_appointment_request' appointment.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-info w-100" type="submit">Done</button>
+                            </form>
+                            <form method="POST" action="{% url 'cancel_appointment_request' appointment.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-danger w-100 mt-2" type="submit">Cancel</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <p class="text-muted">No Pending Appointment</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+        <!-- FInished Appoinment -->
+    <div class="my-5">
+        <h4 class="Listed-Rooms-header fw-bold fs-3">Finished Appoinments</h4>
+        <div class="table-responsive border shadow">
+            <table class="table table-hover border-2">
+                <thead class="table-head">
+                    <tr class="border-2">
+                        <th>Client</th>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if finished_appointments %}
+                    {% for appointment in finished_appointments %}
+                    <tr class="border-2">
+                        <td>{{appointment.customer.name|upper}}</td>
+                        <td>{{appointment.customer.phone}}</td>
+                        <td>{{appointment.date}}</td>
+                        <td>{{appointment.date}}</td>
+                        <td class="text-danger">{{appointment.status|upper}}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <p class="text-muted">You have not Finished any Appointments Yet</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock content %}

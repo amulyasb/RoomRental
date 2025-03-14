@@ -6,9 +6,10 @@ from datetime import timedelta
 class Appointment(models.Model):
     STATUS_CHOICES = (
         ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
+        ('finished', 'Finished'),
         ('rejected', 'Rejected'),
         ('hold', 'Hold'),
+        ('cancel', 'Cancel'),
     )
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='appointments')

@@ -1,0 +1,219 @@
+{% extends "base/sidebar_base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+<!-- Dashboard Overview -->
+<div class="row my-4">
+    <div class="col-md-4 border-2">
+        <div class="card bg-light text-blackn mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Rooms</h5>
+                <p class="card-text">{{seller_total_rooms}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 border-2">
+        <div class="card bg-light text-black mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Subscription Status</h5>
+                {% if user.is_authenticated %}
+                {% if subscription_remaning_days > 0 %}
+                <p class="card-text text-success">
+                    Active
+                </p>
+                {% elif subscription_remaning_days == 0 %}
+                <p class="card-text text-danger">
+                    Inactive
+                </p>
+                {% endif %}
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-4 border-2">
+        <div class="card bg-light text-black  mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Subscription Remaining</h5>
+                {% if user.is_authenticated and user.is_subscribed %}
+                <p class="card-text text-danger">{{subscription_remaning_days}} days</p>
+                {% else %}
+                <p class="card-text text-danger">0 days</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Listed rooms Table -->
+<h4 class="Listed-Rooms-header fw-bold fs-3 mb-3">Listed Rooms</h4>
+<button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
+    <a href="{% url 'seller_rooms' %}">Manage Rooms</a>
+</button>
+<div class="table-responsive border shadow mb-4">
+    <table class="table table-hover">
+        <thead class="table-head">
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>City</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if seller_rooms_table %}
+            {% for sellerRooms in seller_rooms_table %}
+            <tr>
+                <td><img src="{{sellerRooms.room_img.url}}" class="img-fluid" style="height: 70px; width: 100px;"></td>
+                <td>{{sellerRooms.title}}</td>
+                <td>{{sellerRooms.city}}</td>
+                <td>रू{{sellerRooms.price}}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">
+                    <p class="text-muted">No Added Rooms</p>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<!-- end listed room section -->
+
+<!-- appointment booking management  -->
+<div class="row mb-4 mt-5">
+    <div class="col-md-6 border-2">
+        <div class="card bg-light text-black  mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Appoinment Requests</h5>
+                <p class="card-text">{{total_appointment_requests}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 border-2">
+        <div class="card bg-light text-black  mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Pending Appoinments</h5>
+                <p class="card-text">{{total_pending_appointments}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Appoinment Management -->
+<div class="my-4">
+    <h4 class="Listed-Rooms-header fw-bold fs-3 mb-3">Appoinment Request</h4>
+    <button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
+        <a href="{% url 'seller_appointments' %}">Manage Appointments</a>
+    </button>
+    <div class="table-responsive border shadow">
+        <table class="table table-hover border-2">
+            <thead class="table-head">
+                <tr class="border-2">
+                    <th>Client</th>
+                    <th>Phone</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if appointment_requests%}
+                {% for appointment in appointment_requests %}
+                <tr class="border-2">
+                    <td>{{ appointment.customer.name | upper }}</td>
+                    <td>{{ appointment.customer.phone }}</td>
+                    <td>{{ appointment.date }}</td>
+                    <td>{{ appointment.time }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <p class="text-muted">No Appointment Requests</p>
+                    </td>
+                </tr>
+                {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="my-5">
+    <h4 class="Listed-Rooms-header fw-bold fs-3">Pending Appoinment</h4>
+    <div class="table-responsive border shadow">
+        <table class="table table-hover border-2">
+            <thead class="table-head">
+                <tr class="border-2">
+                    <th>Client</th>
+                    <th>Phone</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if pending_appointments %}
+                {% for appointment in pending_appointments %}
+                <tr class="border-2">
+                    <td>{{appointment.customer.name | upper}}</td>
+                    <td>{{appointment.customer.phone}}</td>
+                    <td>{{appointment.date}}</td>
+                    <td>{{appointment.date}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        <p class="text-muted">No Pending Appointment</p>
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
+
+<script>
+    // Add Image Button Functionality
+    document.getElementById('add-image-button').addEventListener('click', function () {
+        const container = document.getElementById('image-upload-container');
+        const imageCount = container.querySelectorAll('input[type="file"]').length;
+
+        const newImageGroup = document.createElement('div');
+        newImageGroup.className = 'mb-3';
+        newImageGroup.innerHTML = `
+            <label for="new_thumb_image_${imageCount + 2}" class="form-label">Additional Image:</label>
+            <input type="file" name="new_thumb_image_${imageCount + 2}" id="new_thumb_image_${imageCount + 2}" class="form-control">
+        `;
+        container.appendChild(newImageGroup);
+    });
+
+    // Add Specification Button Functionality
+    document.getElementById('add-spec-button').addEventListener('click', function () {
+        const container = document.getElementById('specifications-container');
+        const newSpecRow = document.createElement('div');
+        newSpecRow.className = 'row mb-3';
+        newSpecRow.innerHTML = `
+                <div class="col-md-6">
+                    <label class="form-label">Specification Name:</label>
+                    <input type="text" name="new_spec_name[]" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Specification Detail:</label>
+                    <input type="text" name="new_spec_detail[]" class="form-control">
+                </div>
+            `;
+        container.appendChild(newSpecRow);
+    });
+</script>
+
+
+
+{% endblock content %}
