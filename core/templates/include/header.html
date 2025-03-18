@@ -72,9 +72,11 @@
                         <li class="nav-item">
                             <a class="nav-link m-2" aria-current="page" href="{% url 'homepage' %}">Home</a>
                         </li>
+                        {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link m-2" href="{% url 'roomlist' %}">Rooms</a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link m-2" href="#">About</a>
                         </li>

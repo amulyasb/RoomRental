@@ -91,7 +91,7 @@ def roomlist(request):
         # Count unread notifications
         unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
 
-        # fetch featured room section
+        # fetch room section
         all_rooms = Room.objects.all().order_by("-id")
         paginator = Paginator(all_rooms, 12)
 
