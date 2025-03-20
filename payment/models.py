@@ -1,5 +1,11 @@
 from django.db import models
 from accounts.models import User
+from django.utils import timezone
+from datetime import datetime, timedelta
+from django.utils.timezone import now 
+
+
+
 
 # Create your models here.
 class Subscription(models.Model):

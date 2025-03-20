@@ -3,6 +3,7 @@ from accounts.models import *
 from rooms.models import *
 from notifications.models import *
 from appointments.models import *
+from payment.models import *
 from django.core.paginator import Paginator
 from django.utils import timezone
 from django.contrib import messages
@@ -137,9 +138,13 @@ def seller_dashboard(request):
         user = request.user
         if request.user.user_type != 'seller':
             return redirect('login_user')
-        
+        else:
+            user.check_subscription_status()
+            # if not user.is_subscribed:
+            #     return redirect('login_user')
+
         # calculate seller subscription remaning days
-        if user.is_subscribed and user.subscription_end_date:
+        if user.subscription_end_date:
             now = timezone.now()
             subscription_remaning_days = (user.subscription_end_date - now).days
             if subscription_remaning_days < 0:
@@ -176,7 +181,10 @@ def seller_dashboard(request):
 
         # Count unread notifications
         unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
-
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect('login_user')
+    
     data = {
         'user': user,
         'cities': cities,
@@ -201,6 +209,8 @@ def seller_rooms(request):
         user = request.user
         if request.user.user_type != 'seller':
             return redirect('login_user')
+        else:
+            user.check_subscription_status()
         
         # Delete expired notifications
         Notification.delete_old_notifications()
@@ -214,7 +224,9 @@ def seller_rooms(request):
         
         # for fetching seller room object in frontend
         seller_rooms_table = Room.objects.filter(seller=user).order_by("-id")
-        
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect('login_user')
 
     data = {
         'cities': cities,
@@ -234,6 +246,8 @@ def seller_appointments(request):
         user = request.user
         if request.user.user_type != 'seller':
             return redirect('login_user')
+        else:
+            user.check_subscription_status()
         
         # calculate seller subscription remaning days
         if user.is_subscribed and user.subscription_end_date:
@@ -263,22 +277,81 @@ def seller_appointments(request):
         pending_appointments = Appointment.objects.filter(seller=user, status='pending').order_by('date')
 
         # fetching finished appointments
-        finished_appointments = Appointment.objects.filter(
-            seller=user, 
-                status__in=['finished', 'cancel']
-                ).order_by('date')
+        finished_appointments = Appointment.objects.filter(seller=user, status='finished').order_by('date')
+
+        # fetching canceled appointments
+        canceled_appointments = Appointment.objects.filter(seller=user, status='cancel').order_by('date')
+
+        # Get filter value from URL
+        filter_option = request.GET.get('filter', 'requests') 
+                
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect('login_user')
 
 
         
-        data={
-            'appointment_requests': appointment_requests,
-            'pending_appointments': pending_appointments,
-            'finished_appointments': finished_appointments,
-            'notifications':notifications,
-            'unread_notifications_count': unread_notifications_count,
-        }
+    data={
+        'appointment_requests': appointment_requests,
+        'pending_appointments': pending_appointments,
+        'finished_appointments': finished_appointments,
+        'canceled_appointments': canceled_appointments,            'notifications':notifications,
+        'unread_notifications_count': unread_notifications_count,
+        'filter_option': filter_option,
+    }
 
     return render(request, "seller/seller_appointments.html", data)
+
+
+# Seller Subscription
+def seller_subscription(request):
+    cities = city.objects.all()
+    if request.user.is_authenticated:
+        user = request.user
+        if request.user.user_type != 'seller':
+            return redirect('login_user')
+        else:
+            user.check_subscription_status()
+        
+        # calculate seller subscription remaning days
+        if user.is_subscribed and user.subscription_end_date:
+            now = timezone.now()
+            subscription_remaning_days = (user.subscription_end_date - now).days
+            if subscription_remaning_days < 0:
+                subscription_remaning_days = 0
+
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+    
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+        
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
+        # Delete rejected notification
+        appointments = Appointment.objects.filter(seller=user, status='rejected')
+        for appointment in appointments:
+            appointment.delete_rejected_appointments()  
+
+        
+        subscriptions = Subscription.objects.filter(seller=user).order_by("id")
+        payments = Payment.objects.filter(seller=user).order_by("id")
+                
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect('login_user')
+
+
+    data={
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
+        'cities': cities,
+        'subscriptions': subscriptions,
+        'payments':payments,
+    }
+
+    return render(request, "seller/seller_subscription.html", data)
 
 
 
@@ -289,15 +362,21 @@ def seller_profile(request):
         user = request.user
         if request.user.user_type != 'seller':
             return redirect('login_user')
-    # Delete expired notifications
-    Notification.delete_old_notifications()
-    
-    # Fetch notifications for the seller
-    notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+        else:
+            user.check_subscription_status()
+        # Delete expired notifications
+        Notification.delete_old_notifications()
         
-    # Count unread notifications
-    unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
-
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+            
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+        
+    else:
+        messages.error(request, "Unauthorized User")
+        return redirect('login_user')
+    
     data={
         'cities':cities,
         'notifications':notifications,
