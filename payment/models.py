@@ -10,7 +10,7 @@ from django.utils.timezone import now
 # Create your models here.
 class Subscription(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions')
-    transaction_id = models.CharField(max_length=100)  # Khalti transaction ID
+    transaction_id = models.CharField(max_length=100)
     start_date = models.DateTimeField(auto_now_add=True)  
     end_date = models.DateTimeField() 
     is_active = models.BooleanField(default=False)

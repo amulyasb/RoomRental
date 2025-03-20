@@ -49,9 +49,15 @@
 
 <!-- Listed rooms Table -->
 <h4 class="Listed-Rooms-header fw-bold fs-3 mb-3">Listed Rooms</h4>
+{% if not user.is_subscribed %}
+<button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
+    <a href="{% url 'seller_rooms' %}" data-bs-toggle="modal" data-bs-target="#renewModal">Manage Rooms</a>
+</button>
+{% else %}
 <button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
     <a href="{% url 'seller_rooms' %}">Manage Rooms</a>
 </button>
+{% endif %}
 <div class="table-responsive border shadow mb-4">
     <table class="table table-hover">
         <thead class="table-head">
@@ -107,9 +113,15 @@
 <!-- Appoinment Management -->
 <div class="my-4">
     <h4 class="Listed-Rooms-header fw-bold fs-3 mb-3">Appoinment Request</h4>
+    {% if not user.is_subscribed %}
+    <button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
+        <a href="{% url 'seller_appointments' %}" data-bs-toggle="modal" data-bs-target="#renewModal">Manage Appointments</a>
+    </button>
+    {% else%}
     <button class="btn-s-dashboard-add-room mb-3 p-2 fw-bold">
         <a href="{% url 'seller_appointments' %}">Manage Appointments</a>
     </button>
+    {% endif %}
     <div class="table-responsive border shadow">
         <table class="table table-hover border-2">
             <thead class="table-head">

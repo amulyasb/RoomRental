@@ -140,8 +140,6 @@ def seller_dashboard(request):
             return redirect('login_user')
         else:
             user.check_subscription_status()
-            # if not user.is_subscribed:
-            #     return redirect('login_user')
 
         # calculate seller subscription remaning days
         if user.subscription_end_date:
