@@ -1,0 +1,74 @@
+.btn-register {
+    background-color: #ffffff;
+    color: #2A3855;
+    border: 2px solid #2A3855;
+}
+
+.btn-register:hover {
+    background-color: #5C2D91 !important;
+    color: white !important;
+    transform: scale(1.00) !important;
+    box-shadow: 0 4px 8px rgba(42, 56, 85, 0.3);
+}
+
+/* Simple Message Styling */
+.messages {
+    margin: 20px 0;
+    width: 100%;
+}
+
+.alert-message {
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    border-left: 5px solid;
+    background-color: #f8f9fa;
+}
+
+.message-icon {
+    font-size: 1.2rem;
+    margin-right: 12px;
+}
+
+.message-content {
+    flex-grow: 1;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.7;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+/* Color Variations */
+.alert-success {
+    color: #155724;
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.alert-error {
+    color: #721c24;
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+.alert-warning {
+    color: #856404;
+    border-color: #ffc107;
+    background-color: #fff3cd;
+}
+
+.alert-info {
+    color: #0c5460;
+    border-color: #17a2b8;
+    background-color: #d1ecf1;
+}

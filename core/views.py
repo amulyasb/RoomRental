@@ -239,6 +239,7 @@ def seller_rooms(request):
 
 # seller appointment 
 def seller_appointments(request):
+
     cities = city.objects.all()
     if request.user.is_authenticated:
         user = request.user
@@ -333,8 +334,8 @@ def seller_subscription(request):
             appointment.delete_rejected_appointments()  
 
         
-        subscriptions = Subscription.objects.filter(seller=user).order_by("id")
-        payments = Payment.objects.filter(seller=user).order_by("id")
+        subscriptions = Subscription.objects.filter(seller=user).order_by("-id")[:1]
+        payments = Payment.objects.filter(seller=user).order_by("-id")
                 
     else:
         messages.error(request, "Unauthorized User")
@@ -355,6 +356,7 @@ def seller_subscription(request):
 
 # seller profile
 def seller_profile(request):
+
     cities = city.objects.all()
     if request.user.is_authenticated:
         user = request.user

@@ -218,7 +218,8 @@ def verify_payment(request):
                         amount= 1500, 
                         transaction_id=transaction_id,
                         payment_date=payment_date,
-                        status='success'
+                        status='success',
+                        payment_title='Account Created'
                     )
                     user.save()
                     messages.success(request, "Payment Successful... Account Created")

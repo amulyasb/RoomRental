@@ -58,6 +58,7 @@ def add_room(request):
 
     data = {
         'cities': cities,
+
     }
     return render(request, "seller/add_room.html", data)
 

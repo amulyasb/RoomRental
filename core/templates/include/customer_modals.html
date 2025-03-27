@@ -1,0 +1,24 @@
+{% load static %}
+
+<!-- Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Log In First.. 
+                </h5>
+                <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="fs-5 fw-semibold text-dark">You must <span class="text-danger fw-bold">Login</span> to access this.</p>
+                <p class="text-muted">Please log in to continue.</p>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <a href="{% url 'login_user' %}" class="btn btn-lg px-5 featured-btn-view-more fw-bold mt-0">
+                    Login Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

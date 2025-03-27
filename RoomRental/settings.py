@@ -29,6 +29,8 @@ SECRET_KEY = 'django-insecure-=3smxsla%z2umozrhiz%d44ft&#)$*bg)at)nw((grma4j6v-v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEST_MODE = True  
+
 ALLOWED_HOSTS = []
 
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailAuthBackend']

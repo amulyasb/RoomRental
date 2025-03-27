@@ -88,8 +88,11 @@
                 <div class="card h-100 shadow-sm border-0">
                     <img src="{{feature_room_obj.room_img.url}}" class="card-img-top" alt="Deluxe Suite">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold room-name">{{feature_room_obj.title}}</h5>
-                        <p class="overflow-hidden text-truncate room-details">{{feature_room_obj.address}}</p>
+                        <h5 class="card-title fw-bold overflow-hidden text-truncate room-name">{{feature_room_obj.title}}</h5>
+                        <p class="room-details">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            {{feature_room_obj.city}}
+                        </p>
                         <div class="d-flex justify-content-between align-items-center flex-lg-column">
                             <span class="h5 mb-0 room-price ">रू{{feature_room_obj.price}}</span>
                             {% if user.is_authenticated %}
@@ -266,27 +269,6 @@
 <!-- Our Cities section -->
 
 
-<!-- Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content shadow-lg border-0">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Access Denied
-                </h5>
-                <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p class="fs-5 fw-semibold text-dark">You must <span class="text-danger fw-bold">Login</span> to access this content.</p>
-                <p class="text-muted">Please log in to continue.</p>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <a href="{% url 'login_user' %}" class="btn btn-lg px-5 featured-btn-view-more fw-bold mt-0">
-                    Login Now
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 {% endblock content %}
