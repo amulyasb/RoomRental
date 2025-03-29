@@ -364,6 +364,17 @@ def seller_subscription(request):
         
         subscriptions = Subscription.objects.filter(seller=user).order_by("-id")[:1]
         payments = Payment.objects.filter(seller=user).order_by("-id")
+
+
+        # payment sorting through days
+        payment_filter = request.GET.get('days')
+        if payment_filter:
+            days = int(payment_filter)
+            filtered_payment= timezone.now() - timedelta(days=days)
+            payments = payments.filter(payment_date__gte=filtered_payment)
+        else:
+            payments = Payment.objects.filter(seller=user).order_by("-id")
+
                 
     else:
         messages.error(request, "Unauthorized User")
@@ -376,6 +387,7 @@ def seller_subscription(request):
         'cities': cities,
         'subscriptions': subscriptions,
         'payments':payments,
+        'payment_filter': payment_filter,
     }
 
     return render(request, "seller/seller_subscription.html", data)
