@@ -83,6 +83,35 @@ def roomlist(request):
         if request.user.user_type != 'customer':  
             return redirect('login_user')
         
+        all_rooms = Room.objects.all().order_by("-id")
+        
+        if request.method == "POST":
+            searched_room = request.POST.get("searched_room_name")
+            min_price = request.POST.get("min-price")
+            max_price = request.POST.get("max-price")
+            searched_city = request.POST.get("searched_city")
+            print(searched_city)
+
+            # searched_city = city.objects.filter(id=searched_city_id).first()
+
+            # for filter rooms
+            # Filter by room title
+            if searched_room:
+                all_rooms = all_rooms.filter(title__icontains = searched_room)
+            
+            # Filter by city
+            if min_price and max_price:
+                all_rooms = all_rooms.filter(price__gte=min_price, price__lte=max_price)
+            elif min_price:
+                all_rooms = all_rooms.filter(price__gte=min_price)
+            elif max_price:
+                all_rooms = all_rooms.filter(price__lte=max_price)
+
+            # filter by city
+            if searched_city:
+                all_rooms = all_rooms.filter(city=searched_city)
+
+        
         # Delete expired notifications
         Notification.delete_old_notifications()
 
@@ -93,7 +122,6 @@ def roomlist(request):
         unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
 
         # fetch room section
-        all_rooms = Room.objects.all().order_by("-id")
         paginator = Paginator(all_rooms, 12)
 
         page_number = request.GET.get("page") 

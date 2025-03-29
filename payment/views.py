@@ -72,8 +72,7 @@ def renew_subs(request):
 
 # verify renew subscription
 def verify_renewal(request):
-    renew_success_modal=False
-    renew_fail_modal = False
+
     lookup_url = "https://dev.khalti.com/api/v2/epayment/lookup/" 
 
     if request.method == 'GET':
