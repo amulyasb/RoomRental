@@ -1,0 +1,54 @@
+/* ===== Modern Admin CSS ===== */
+:root {
+    --primary: #3498db;
+    --secondary: #2c3e50;
+    --accent: #e74c3c;
+}
+
+/* Header & Branding */
+#header {
+    background: var(--secondary) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#branding h1 {
+    font-weight: 700;
+    color: white !important;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background: #f8f9fa !important;
+    border-right: 1px solid #eee !important;
+}
+
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background: var(--primary) !important;
+}
+
+/* Tables & Cards */
+.card {
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.table th {
+    background: #f8f9fa !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+/* Login Page */
+.login-box {
+    max-width: 450px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.login-logo {
+    font-size: 2.5rem !important;
+    margin-bottom: 2rem !important;
+}
