@@ -41,7 +41,7 @@
                         {% endif %}                        
                     </a>
                     {% endif %}
-                    <a href="#" class="text-white text-decoration-none">
+                    <a href="{% url 'customer_profile' %}" class="text-white text-decoration-none">
                         {% if user.is_authenticated %}
                             {% if user.name %}
                                 <i class="fas fa-user"></i>&nbsp;&nbsp;{{ user.name | upper }}

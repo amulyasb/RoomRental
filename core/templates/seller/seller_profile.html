@@ -64,16 +64,32 @@
             <div class="container">
                 <div class="profile-container">
                     <h2 class="mb-4 text-center">User Profile</h2>
-                        <!-- Display messages -->
-                        {% if messages %}
-                        <div class="messages">
+                    <!-- Display messages -->
+                    {% if messages %}
+                    <div class="messages">
                         {% for message in messages %}
-                            <div class="message {{ message.tags }}">
+                        <div class="alert-message alert-{{ message.tags }}">
+                            <div class="message-icon">
+                                {% if message.tags == 'success' %}
+                                <i class="fas fa-check-circle"></i>
+                                {% elif message.tags == 'error' %}
+                                <i class="fas fa-exclamation-circle"></i>
+                                {% elif message.tags == 'warning' %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                                {% else %}
+                                <i class="fas fa-info-circle"></i>
+                                {% endif %}
+                            </div>
+                            <div class="message-content">
                                 {{ message }}
                             </div>
-                        {% endfor %}
+                            <button class="close-btn" onclick="this.parentElement.remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
 
                     <form method="POST" action="{% url 'update_profile_seller' %}" enctype="multipart/form-data">
                         {% csrf_token %}

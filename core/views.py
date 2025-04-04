@@ -155,6 +155,90 @@ def roomdetail(request,slug):
 
     return render(request, "core/roomdetail.html", data)
 
+def customer_profile(request):
+    cities = city.objects.all()
+    notifications = None
+    unread_notifications_count = None
+
+    if request.user.is_authenticated:
+        user = request.user
+        # Check if the user is not a customer
+        if request.user.user_type != 'customer':  
+            return redirect('login_user')
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+        
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+            
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
+    data={
+        'cities':cities,
+        'notifications':notifications,
+        'unread_notifications_count': unread_notifications_count,
+    }
+
+    return render(request, "core/customer_profile.html", data)
+
+def update_profile_customer(request):
+    if request.method == 'POST':
+        customer_name = request.POST.get("name")
+        customer_email = request.POST.get("email")
+        customer_password = request.POST.get("password")
+        customer_phone = request.POST.get("phone")
+        customer_city = request.POST.get("city")
+        customer_img = request.FILES.get("profile_image")
+        customer_id = request.user.id
+        print(customer_img)
+
+        customer = get_user_model().objects.get(id=customer_id)
+
+            
+        # Check if the email already exists
+        if customer_email and customer_email != customer.email and get_user_model().objects.filter(email=customer_email).exclude(id=customer_id).exists(): 
+        #exclude checks for duplicate email in databse exclude remove the user and checks other user 
+            messages.error(request, "Email already exists!")
+            return redirect("customer_profile")
+        
+
+        # Check if phone is changed and already used by another user
+        if customer_phone and customer_phone != customer.phone and get_user_model().objects.filter(phone=customer_phone).exclude(id=customer_id).exists():
+            messages.error(request, "This phone number is already in use by another account.")
+            return redirect('customer_profile')
+
+        # fetch the user
+        customer.name = customer_name
+        customer.email = customer_email
+        customer.phone = customer_phone
+
+        # Update city only if a new city is provided
+        if customer_city:
+            try:
+                customer.city = city.objects.get(city=customer_city)
+            except city.DoesNotExist:
+                messages.error(request, "Invalid City Selected")
+                return redirect("customer_profile")
+
+        # Update profile image if provided
+        if customer_img:
+            customer.user_image = customer_img
+        
+        # Update password only if provided
+        if customer_password:
+            customer.set_password(customer_password)
+            customer.save()
+            messages.success(request, "Profile Updated Succesfully please login again")
+            return redirect("login_user")
+
+        
+        customer.save()
+        messages.success(request, "Profile Updated Succesfully")
+        return redirect("customer_profile")
+    
+    return render(request, "core/customer_profile.html")
+
 
 
 ###### seller #########
