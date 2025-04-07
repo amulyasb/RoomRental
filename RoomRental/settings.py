@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'payment',
     'rooms',
     'appointments',
-    'notifications'
+    'notifications',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
