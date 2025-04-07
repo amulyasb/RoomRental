@@ -25,7 +25,7 @@ def renew_subs(request):
         payload = json.dumps({
             "return_url": "http://127.0.0.1:8000/verify_renewal",
             "website_url": "http://127.0.0.1:8000/",
-            "amount": 1001 * 100,   
+            "amount": 500 * 100,   
             "purchase_order_id": purchase_order_id,
             "purchase_order_name": "Seller Subscription Renewal",
         })
@@ -47,7 +47,7 @@ def renew_subs(request):
         #     })
 
         headers = {
-            'Authorization': 'key 5d3c29d893104778bc3b64879132d241',
+            'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
             'Content-Type': 'application/json',
         }
         response = requests.post(url, headers=headers, data=payload)
@@ -77,7 +77,7 @@ def verify_renewal(request):
 
     if request.method == 'GET':
         headers = {
-            'Authorization': 'key 5d3c29d893104778bc3b64879132d241',
+            'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')

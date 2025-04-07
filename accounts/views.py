@@ -99,12 +99,18 @@ def seller_registration(request):
         payload = json.dumps({
             "return_url": "http://127.0.0.1:8000/verify",
             "website_url": "http://127.0.0.1:8000/",
-            "amount": 1500 * 100,
+            "amount": 500 * 100,
             "purchase_order_id": purchase_order_id,
             "purchase_order_name": "Seller Subscription",
+            "customer_info": {
+                "name": name,
+                "email": email,
+                "phone": phone
+            }
+
         })
         headers = {
-            'Authorization': 'key 5d3c29d893104778bc3b64879132d241',
+            'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
             'Content-Type': 'application/json',
         }
         response = requests.post(url, headers=headers, data=payload)
@@ -143,7 +149,7 @@ def verify_payment(request):
     
     if request.method == 'GET':
         headers = {
-            'Authorization': 'key 5d3c29d893104778bc3b64879132d241',
+            'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
             'Content-Type': 'application/json',
         }
         pidx = request.GET.get('pidx')
@@ -215,7 +221,7 @@ def verify_payment(request):
                     payment_date = datetime.now()
                     Payment.objects.create(
                         seller=user, 
-                        amount= 1500, 
+                        amount= 500, 
                         transaction_id=transaction_id,
                         payment_date=payment_date,
                         status='success',
