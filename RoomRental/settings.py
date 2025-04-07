@@ -38,6 +38,7 @@ AUTHENTICATION_BACKENDS = ['accounts.backends.EmailAuthBackend']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,6 +53,8 @@ INSTALLED_APPS = [
     'appointments',
     'notifications',
     'django_cleanup.apps.CleanupConfig',
+    'chats'
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +86,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'RoomRental.wsgi.application'
+ASGI_APPLICATION = 'RoomRental.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 # Database
