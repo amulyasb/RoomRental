@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'appointments',
     'notifications',
     'django_cleanup.apps.CleanupConfig',
-    'chats'
+    'chat',
     'channels',
 ]
 
@@ -88,11 +88,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'RoomRental.wsgi.application'
 ASGI_APPLICATION = 'RoomRental.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+#     },
+# }
 
 
 # Database
