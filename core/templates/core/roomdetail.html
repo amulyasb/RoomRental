@@ -41,8 +41,8 @@
 
                         <!-- Book Now Button -->
                         <div class="btns d-flex flex-wrap gap-3 p-3">
-                            <a href="" class="room-detail-btn w-100 w-md-50 py-2 fs-5 text-center text-decoration-none fw-semibold">
-                                <i class="fas fa-calendar-check me-2"></i>Chat with Seller
+                            <a href="{% url 'initiate_chat' room_detail.room_slug %}" class="room-detail-btn w-100 w-md-50 py-2 fs-5 text-center text-decoration-none fw-semibold">
+                                <i class="fas fa-comments me-2"></i>Chat with Seller
                             </a>
                             <button class="room-detail-btn w-100 w-md-50 py-2 fs-5 fw-semibold" data-bs-toggle="modal" data-bs-target="#appointmentModal">
                                 <i class="fas fa-calendar-check me-2"></i>Book Appoinment

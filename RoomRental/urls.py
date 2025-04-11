@@ -28,4 +28,6 @@ urlpatterns = [
     path('', include("rooms.urls")),
     path('', include("appointments.urls")),
     path('', include("notifications.urls")),
+    path('', include("chat.urls")),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

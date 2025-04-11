@@ -85,14 +85,15 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'RoomRental.wsgi.application'
+# WSGI_APPLICATION = 'RoomRental.wsgi.application'
 ASGI_APPLICATION = 'RoomRental.asgi.application'
 
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
-#     },
-# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
 
 
 # Database

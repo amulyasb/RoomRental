@@ -1,0 +1,299 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .chat-list-container {
+        height: calc(100vh - 120px);
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .chat-header {
+        background: #f1f1f1;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+    }
+    .chat-list {
+        height: calc(100% - 60px);
+        overflow-y: auto;
+    }
+    .chat-list-item {
+        display: flex;
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        text-decoration: none;
+        color: #333;
+        transition: background 0.2s;
+        position: relative;
+    }
+    .chat-list-item:hover {
+        background: #e9ecef;
+    }
+    .chat-list-item.active {
+        background: #e7f1ff;
+    }
+    .chat-list-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+    .chat-list-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .chat-list-info {
+        flex: 1;
+        min-width: 0;
+    }
+    .chat-list-info h6 {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .chat-list-info p {
+        margin: 3px 0 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .unread-indicator {
+        margin-left: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+        display: flex;
+        align-items: center;
+    }
+    .unread-indicator svg {
+        width: 16px;
+        height: 16px;
+    }
+
+        /* Your existing styles remain the same */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .page-link {
+            color: #007bff;
+        }
+
+
+
+
+</style>
+
+<div class="container-fluid chat-list-container">
+    <div class="chat-header">
+        <h4>Your Chats</h4>
+    </div>
+    <div class="chat-list" id="chatList">
+        {% for room in chat_rooms %}
+        <a href="{% url 'chat_room' room.id %}" class="chat-list-item" data-room-id="{{ room.id }}">
+            <div class="chat-list-avatar">
+                {% if room.customer == request.user %}
+                    <img src="{{ room.seller.user_image.url }}" alt="{{ room.seller.name }}">
+                {% else %}
+                    <img src="{{ room.customer.user_image.url }}" alt="{{ room.customer.name }}">
+                {% endif %}
+            </div>
+            <div class="chat-list-info">
+                <h6>
+                    {% if room.customer == request.user %}
+                        <b>{{ room.seller.name | upper }}  :</b> [{{ room.room.title }}]
+                    {% else %}
+                    <b>{{ room.customer.name | upper }}  :</b> [{{ room.room.title }}]
+                    {% endif %}
+                </h6>
+                <p class="text-muted">{{ room.latest_message|truncatechars:30 }}</p>
+            </div>
+            <div class="unread-indicator {% if not room.has_unread_messages %}d-none{% endif %}">
+                <svg viewBox="0 0 24 24" fill="#2196F3">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+        </a>
+        {% empty %}
+        <div class="p-3 text-center text-muted">
+            No chats yet
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Pagination -->
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+        <nav aria-label="Chat pagination">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+
+</div>
+<script>
+    const chatListSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
+    );
+
+    // Connection logging
+    chatListSocket.onopen = function(e) {
+        console.log("Chat list WebSocket connected");
+    };
+
+    chatListSocket.onclose = function(e) {
+        console.log("Chat list WebSocket disconnected", e);
+        // Optional: Add reconnection logic here
+    };
+
+    chatListSocket.onerror = function(e) {
+        console.error("Chat list WebSocket error:", e);
+    };
+
+    chatListSocket.onmessage = function(e) {
+        console.log("Chat list update received:", e.data);
+        const data = JSON.parse(e.data);
+        if (data.type === 'chat_list_update') {
+            updateChatList(data);
+        }
+    };
+
+    function updateChatList(data) {
+
+        
+        const chatItem = document.querySelector(`.chat-list-item[data-room-id="${data.room_id}"]`);
+        const chatList = document.getElementById('chatList');
+        
+        if (chatItem) {
+            // Update message preview
+            const messagePreview = chatItem.querySelector('.chat-list-info p');
+            if (messagePreview) {
+                messagePreview.textContent = data.latest_message;
+            }
+            
+            // Update unread indicator
+            const unreadIndicator = chatItem.querySelector('.unread-indicator');
+            if (unreadIndicator) {
+                if (data.has_unread) {
+                    unreadIndicator.classList.remove('d-none');
+                } else {
+                    unreadIndicator.classList.add('d-none');
+                }
+            }
+            
+            // Move to top
+            if (chatList.firstChild) {
+                chatList.insertBefore(chatItem, chatList.firstChild);
+            }
+        } else {
+            console.log("New chat room detected - might need to refresh");
+        }
+    }
+</script>
+{% comment %} <script>
+    const chatListSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
+    );
+
+    // Connection logging
+    chatListSocket.onopen = function(e) {
+        console.log("Chat list WebSocket connected");
+    };
+
+    chatListSocket.onclose = function(e) {
+        console.log("Chat list WebSocket disconnected", e);
+        // Optional: Add reconnection logic here
+    };
+
+    chatListSocket.onerror = function(e) {
+        console.error("Chat list WebSocket error:", e);
+    };
+
+    chatListSocket.onmessage = function(e) {
+        console.log("Chat list update received:", e.data);
+        const data = JSON.parse(e.data);
+        if (data.type === 'chat_list_update') {
+            updateChatList(data);
+        }
+    };
+
+    function updateChatList(data) {
+        const chatItem = document.querySelector(`.chat-list-item[data-room-id="${data.room_id}"]`);
+        const chatList = document.getElementById('chatList');
+        
+        if (chatItem) {
+            // Update message preview
+            const messagePreview = chatItem.querySelector('.chat-list-info p');
+            if (messagePreview) {
+                messagePreview.textContent = data.latest_message;
+            }
+            
+            // Update unread indicator
+            const unreadIndicator = chatItem.querySelector('.unread-indicator');
+            if (unreadIndicator) {
+                if (data.has_unread) {
+                    unreadIndicator.classList.remove('d-none');
+                } else {
+                    unreadIndicator.classList.add('d-none');
+                }
+            }
+            
+            
+            // Move to top
+            if (chatList.firstChild) {
+                chatList.insertBefore(chatItem, chatList.firstChild);
+            }
+        } else {
+            console.log("New chat room detected - might need to refresh");
+        }
+    }
+</script> {% endcomment %}
+
+
+{% endblock content %}

@@ -5,7 +5,7 @@ from autoslug import AutoSlugField
 
 # Create your models here.
 class Room(models.Model):
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Seller_rooms')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Seller_rooms', limit_choices_to={'user_type': 'seller'})
     title = models.CharField(max_length=100)
     address = models.TextField()
     city = models.ForeignKey(city, on_delete=models.CASCADE, related_name='room_city')

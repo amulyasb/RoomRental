@@ -63,17 +63,18 @@
                 {% if not user.is_subscribed %}
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="fas fa-bed me-2"></i>
                         Rooms</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="far fa-calendar-check me-2"></i>
+                        Appointments</a></li>                        
                 {% else %}
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}"><i class="fa-solid fa-bed"></i></i>
                     Rooms</a></li>
-                {% endif %}
-                {% if not user.is_subscribed %}
-                <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="far fa-calendar-check me-2"></i>
-                        Appointments</a></li>
-                {% else %}
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}"><i class="far fa-calendar-check me-2"></i>
                     Appointments</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_chat_list' %}"><i class="far fa-comments me-2"></i>
+                    Chats</a></li>
                 {% endif %}
+
+
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_subscription' %}"><i class="fas fa-clipboard-list me-2"></i>
                         Subscription</a></li>
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_profile'%}"><i class="fas fa-user me-2"></i>
@@ -103,16 +104,22 @@
                     {% if not user.is_subscribed %}
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="fas fa-bed me-2"></i>
                             Rooms</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="far fa-calendar-check me-2"></i>
+                            Appointments</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_chat_list' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="far fa-comments me-2"></i>
+                            Chats</a></li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_rooms' %}"><i class="fa-solid fa-bed"></i></i>
                         Rooms</a></li>
-                    {% endif %}
-                    {% if not user.is_subscribed %}
-                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}" data-bs-toggle="modal" data-bs-target="#renewModal"><i class="far fa-calendar-check me-2"></i>
-                            Appointments</a></li>
-                    {% else %}
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_appointments' %}"><i class="far fa-calendar-check me-2"></i>
                         Appointments</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_chat_list' %}"><i class="far fa-comments me-2"></i>
+                        Chats</a></li>
+                    {% endif %}
+                    {% if not user.is_subscribed %}
+
+                    {% else %}
+
                     {% endif %}
                     <li class="nav-item"><a class="nav-link text-white" href="{% url 'seller_subscription' %}"><i class="fas fa-clipboard-list me-2"></i>
                             Subscription</a></li>
