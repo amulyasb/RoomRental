@@ -75,14 +75,8 @@ def customer_chat_list(request):
             room.has_unread_messages = room.has_real_unread
             room.save()
 
-        # Add pagination
-        paginator = Paginator(chat_rooms, 1)  # Show 10 chat rooms per page
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-
         return render(request, 'customer_chatlist.html', {
             'chat_rooms': chat_rooms,
-            'page_obj': page_obj,
             'current_chat': None
         })
 
@@ -110,6 +104,7 @@ def seller_chat_list(request):
             room.save()
         # Still call update_unread_status for WebSocket consistency
         room.update_unread_status()
+
     
     return render(request, 'seller_chatlist.html', {
         'chat_rooms': chat_rooms,

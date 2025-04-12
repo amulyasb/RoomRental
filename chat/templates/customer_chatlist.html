@@ -2,194 +2,266 @@
 {% load static %}
 {% block content %}
 <style>
-    .chat-list-container {
+    .chat-container {
         height: calc(100vh - 120px);
-        border: 1px solid #ddd;
-        border-radius: 8px;
+        border-radius: 10px;
         overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
     }
+
     .chat-header {
-        background: #f1f1f1;
-        border-bottom: 1px solid #ddd;
-        padding: 15px;
+        background-color:rgb(250, 250, 255);
+        color: linear-gradient(to right, #2A3855, #3a4a6e);
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
+
     .chat-list {
         height: calc(100% - 60px);
         overflow-y: auto;
+        padding: 0;
     }
+
     .chat-list-item {
         display: flex;
-        padding: 12px;
-        border-bottom: 1px solid #eee;
+        align-items: center;
+        padding: 12px 20px;
+        border-bottom: 1px solid #f0f0f0;
         text-decoration: none;
         color: #333;
-        transition: background 0.2s;
+        transition: all 0.2s ease;
         position: relative;
     }
+
     .chat-list-item:hover {
-        background: #e9ecef;
+        background-color: #f8f9fa;
     }
+
     .chat-list-item.active {
-        background: #e7f1ff;
+        background-color: #e7f1ff;
     }
+
     .chat-list-avatar {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         overflow: hidden;
-        margin-right: 12px;
+        margin-right: 15px;
         flex-shrink: 0;
+        border: 2px solid #e9ecef;
+        transition: border-color 0.2s ease;
     }
+
+    .chat-list-item:hover .chat-list-avatar {
+        border-color: #dee2e6;
+    }
+
     .chat-list-avatar img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
+
     .chat-list-info {
         flex: 1;
         min-width: 0;
     }
+
     .chat-list-info h6 {
         margin: 0;
+        font-weight: 600;
+        font-size: 0.95rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-    .chat-list-info p {
-        margin: 3px 0 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .unread-indicator {
-        margin-left: auto;
-        padding-left: 15px;
-        padding-right: 15px;
         display: flex;
         align-items: center;
     }
-    .unread-indicator svg {
-        width: 16px;
-        height: 16px;
+
+    .chat-list-info p {
+        margin: 4px 0 0;
+        color: #6c757d;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-        /* Your existing styles remain the same */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            padding: 15px;
-            border-top: 1px solid #ddd;
+    .unread-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        background-color: #2196F3;
+        border-radius: 50%;
+        margin-left: 15px;
+        flex-shrink: 0;
+    }
+
+    .unread-indicator svg {
+        width: 12px;
+        height: 12px;
+        fill: white;
+    }
+
+    .room-title {
+        font-size: 0.75rem;
+        color: #495057;
+        background-color: #f1f3f5;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
+        white-space: nowrap;
+        max-width: 120px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .empty-state-icon {
+        font-size: 2.5rem;
+        color: #adb5bd;
+        margin-bottom: 15px;
+    }
+
+    .timestamp {
+        font-size: 0.75rem;
+        color: #adb5bd;
+        margin-left: auto;
+        padding-left: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .chat-container {
+            height: calc(100vh - 80px);
+            border-radius: 0;
         }
-        .page-item.active .page-link {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        .page-link {
-            color: #007bff;
+
+        .chat-list-item {
+            padding: 12px 15px;
         }
 
+        .chat-list-avatar {
+            width: 42px;
+            height: 42px;
+            margin-right: 12px;
+        }
 
+        .room-title {
+            max-width: 80px;
+        }
+    }
 
+    /* Custom scrollbar */
+    .chat-list::-webkit-scrollbar {
+        width: 6px;
+    }
 
+    .chat-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .chat-list::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    .chat-list::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
 </style>
 
-<div class="container-fluid chat-list-container">
+<div class="container-fluid p-0 chat-container">
     <div class="chat-header">
-        <h4>Your Chats</h4>
+        <h5 class="mb-0">Your Conversations</h5>
+        <span class="badge bg-light text-dark">{{ chat_rooms|length }} chats</span>
     </div>
+    
     <div class="chat-list" id="chatList">
         {% for room in chat_rooms %}
         <a href="{% url 'chat_room' room.id %}" class="chat-list-item" data-room-id="{{ room.id }}">
             <div class="chat-list-avatar">
                 {% if room.customer == request.user %}
-                    <img src="{{ room.seller.user_image.url }}" alt="{{ room.seller.name }}">
+                    <img src="{{ room.seller.user_image.url }}" alt="{{ room.seller.name }}" class="img-fluid">
                 {% else %}
-                    <img src="{{ room.customer.user_image.url }}" alt="{{ room.customer.name }}">
+                    <img src="{{ room.customer.user_image.url }}" alt="{{ room.customer.name }}" class="img-fluid">
                 {% endif %}
             </div>
+            
             <div class="chat-list-info">
                 <h6>
                     {% if room.customer == request.user %}
-                        <b>{{ room.seller.name | upper }}  :</b> [{{ room.room.title }}]
+                        {{ room.seller.name | upper }}
                     {% else %}
-                    <b>{{ room.customer.name | upper }}  :</b> [{{ room.room.title }}]
+                        {{ room.customer.name | upper }}
                     {% endif %}
+                    <span class="room-title">{{ room.room.title }}</span>
                 </h6>
-                <p class="text-muted">{{ room.latest_message|truncatechars:30 }}</p>
+                <p class="text-muted">
+                    {% if room.latest_message %}
+                        {{ room.latest_message|truncatechars:30 }}
+                    {% else %}
+                        No messages yet
+                    {% endif %}
+                </p>
             </div>
-            <div class="unread-indicator {% if not room.has_unread_messages %}d-none{% endif %}">
-                <svg viewBox="0 0 24 24" fill="#2196F3">
+            
+            {% if room.has_unread_messages %}
+            <div class="unread-indicator">
+                <svg viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                 </svg>
             </div>
+            {% endif %}
+            
+            {% if room.latest_message_timestamp %}
+            <span class="timestamp">{{ room.latest_message_timestamp|timesince }} ago</span>
+            {% endif %}
         </a>
         {% empty %}
-        <div class="p-3 text-center text-muted">
-            No chats yet
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="far fa-comment-dots"></i>
+            </div>
+            <h5 class="text-muted mb-2">No conversations yet</h5>
+            <p class="text-muted">Start a new conversation to see it appear here</p>
         </div>
         {% endfor %}
     </div>
-    <!-- Pagination -->
-    {% if page_obj.paginator.num_pages > 1 %}
-    <div class="pagination">
-        <nav aria-label="Chat pagination">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1" aria-label="First">
-                            <span aria-hidden="true">&laquo;&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-                
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <li class="page-item active">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                    {% endif %}
-                {% endfor %}
-                
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
-                            <span aria-hidden="true">&raquo;&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-    {% endif %}
-
 </div>
+
 <script>
     const chatListSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
+        'wss://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
     );
 
-    // Connection logging
+    // Connection handling with reconnection logic
     chatListSocket.onopen = function(e) {
         console.log("Chat list WebSocket connected");
     };
 
     chatListSocket.onclose = function(e) {
         console.log("Chat list WebSocket disconnected", e);
-        // Optional: Add reconnection logic here
+        // Attempt to reconnect after 5 seconds
+        setTimeout(function() {
+            console.log("Attempting to reconnect...");
+            window.location.reload();
+        }, 5000);
     };
 
     chatListSocket.onerror = function(e) {
@@ -197,16 +269,17 @@
     };
 
     chatListSocket.onmessage = function(e) {
-        console.log("Chat list update received:", e.data);
-        const data = JSON.parse(e.data);
-        if (data.type === 'chat_list_update') {
-            updateChatList(data);
+        try {
+            const data = JSON.parse(e.data);
+            if (data.type === 'chat_list_update') {
+                updateChatList(data);
+            }
+        } catch (error) {
+            console.error("Error parsing WebSocket message:", error);
         }
     };
 
     function updateChatList(data) {
-
-        
         const chatItem = document.querySelector(`.chat-list-item[data-room-id="${data.room_id}"]`);
         const chatList = document.getElementById('chatList');
         
@@ -214,27 +287,63 @@
             // Update message preview
             const messagePreview = chatItem.querySelector('.chat-list-info p');
             if (messagePreview) {
-                messagePreview.textContent = data.latest_message;
+                messagePreview.textContent = data.latest_message || "No messages yet";
+                messagePreview.classList.add('text-primary');
+                setTimeout(() => {
+                    messagePreview.classList.remove('text-primary');
+                }, 1000);
             }
             
-            // Update unread indicator
-            const unreadIndicator = chatItem.querySelector('.unread-indicator');
-            if (unreadIndicator) {
-                if (data.has_unread) {
-                    unreadIndicator.classList.remove('d-none');
-                } else {
-                    unreadIndicator.classList.add('d-none');
+            // Update timestamp if available
+            if (data.timestamp) {
+                const timestampElement = chatItem.querySelector('.timestamp');
+                if (timestampElement) {
+                    timestampElement.textContent = data.timestamp + ' ago';
                 }
             }
             
-            // Move to top
-            if (chatList.firstChild) {
+            // Update unread indicator
+            let unreadIndicator = chatItem.querySelector('.unread-indicator');
+            if (data.has_unread) {
+                if (!unreadIndicator) {
+                    unreadIndicator = document.createElement('div');
+                    unreadIndicator.className = 'unread-indicator';
+                    unreadIndicator.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    `;
+                    chatItem.appendChild(unreadIndicator);
+                }
+            } else if (unreadIndicator) {
+                unreadIndicator.remove();
+            }
+            
+            // Move to top with animation
+            if (chatList.firstChild && chatList.firstChild !== chatItem) {
+                chatItem.style.opacity = '0';
+                chatItem.style.transform = 'translateY(-20px)';
                 chatList.insertBefore(chatItem, chatList.firstChild);
+                
+                setTimeout(() => {
+                    chatItem.style.transition = 'all 0.3s ease';
+                    chatItem.style.opacity = '1';
+                    chatItem.style.transform = 'translateY(0)';
+                }, 10);
             }
         } else {
-            console.log("New chat room detected - might need to refresh");
+            // For new chats, we'll reload the list for simplicity
+            console.log("New chat room detected - refreshing list");
+            window.location.reload();
         }
     }
+
+    // Handle visibility change to reconnect if tab becomes visible again
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden && chatListSocket.readyState !== WebSocket.OPEN) {
+            window.location.reload();
+        }
+    });
 </script>
 {% comment %} <script>
     const chatListSocket = new WebSocket(

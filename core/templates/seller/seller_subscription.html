@@ -3,67 +3,98 @@
 {% block content %}
 
 <style>
-    .Subs-Head {
-        background-color: #2A3855 !important;
+    .subs-header {
+        background-color: #2A3855;
         color: white;
     }
-
+    
+    .payment-card {
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .payment-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sort-dropdown {
+        border: 2px solid #2A3855 !important;
+        color: #2A3855;
+    }
+    
+    .sort-dropdown:hover {
+        background-color: #2A3855;
+        color: white;
+    }
+    
     @media (max-width: 768px) {
         .card-header {
             font-size: 1.25rem;
         }
-
-        .table th,
-        .table td {
+        
+        .table th, .table td {
             font-size: 0.9rem;
+            padding: 0.75rem 0.5rem;
+        }
+        
+        .dropdown-menu {
+            min-width: auto;
+            width: 100%;
         }
     }
 </style>
 
 <!-- Display messages -->
 {% if messages %}
-<div class="messages">
+<div class="container mt-3">
     {% for message in messages %}
-    <div class="alert-message alert-{{ message.tags }}">
-        <div class="message-icon">
-            {% if message.tags == 'success' %}
-            <i class="fas fa-check-circle"></i>
-            {% elif message.tags == 'error' %}
-            <i class="fas fa-exclamation-circle"></i>
-            {% elif message.tags == 'warning' %}
-            <i class="fas fa-exclamation-triangle"></i>
-            {% else %}
-            <i class="fas fa-info-circle"></i>
-            {% endif %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <div class="me-3">
+                {% if message.tags == 'success' %}
+                <i class="fas fa-check-circle fs-4"></i>
+                {% elif message.tags == 'error' %}
+                <i class="fas fa-exclamation-circle fs-4"></i>
+                {% elif message.tags == 'warning' %}
+                <i class="fas fa-exclamation-triangle fs-4"></i>
+                {% else %}
+                <i class="fas fa-info-circle fs-4"></i>
+                {% endif %}
+            </div>
+            <div class="flex-grow-1">
+                {{ message }}
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="message-content">
-            {{ message }}
-        </div>
-        <button class="close-btn" onclick="this.parentElement.remove()">
-            <i class="fas fa-times"></i>
-        </button>
     </div>
     {% endfor %}
 </div>
 {% endif %}
 
-<div class="container mt-4">
-    <h2 class="text-center fw-bold mb-3">Subscription & Payment Details</h2>
+<div class="container py-4">
+    <div class="text-center">
+        <h2 class="fw-bold">Subscription & Payment Details</h2>
+        <p class="text-muted">Manage and track your subscription and payment history</p>
+    </div>
 
-    <div class="row mb-5">
-
+    <div class="row g-4">
         <!-- Subscription Overview Section -->
-        <div class="col-lg-4 col-md-12">
-            <div class="card">
-                <div class="card-header Subs-Head">
-                    <h5>Subscription Overview</h5>
+        <div class="col-lg-4">
+            <div class="card payment-card h-100">
+                <div class="card-header subs-header py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        <h5 class="mb-0">Subscription Overview</h5>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <h6 class="card-title">Your Subscription Detail</h6>
+                    <h6 class="card-title text-muted mb-3">Your Subscription Details</h6>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead class="table-head">
-                                <tr class="border-2">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Status</th>
@@ -76,15 +107,20 @@
                                     <td>{{ subscription.end_date|date:"Y-m-d" }}</td>
                                     <td>
                                         {% if subscription.is_active %}
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success rounded-pill">Active</span>
                                         {% else %}
-                                        <span class="badge bg-danger">Inactive</span>
+                                        <span class="badge bg-danger rounded-pill">Inactive</span>
                                         {% endif %}
                                     </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="3" class="text-center">No subscriptions found.</td>
+                                    <td colspan="3" class="text-center py-4">
+                                        <div class="py-2">
+                                            <i class="fas fa-calendar-times text-muted fs-1"></i>
+                                            <p class="text-muted mt-2 mb-0">No subscriptions found</p>
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -95,18 +131,20 @@
         </div>
 
         <!-- Payment Analysis Section -->
-        <div class="col-lg-8 col-md-12 mb-4">
-            <div class="card">
-                <div class="card-header Subs-Head">
-                    <h5>Payment Overview</h5>
+        <div class="col-lg-8">
+            <div class="card payment-card h-100">
+                <div class="card-header subs-header py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-credit-card me-2"></i>
+                        <h5 class="mb-0">Payment Overview</h5>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="head-payment-detail d-flex justify-content-between ">
-                        <h5 class="card-title">Your Recent Payments</h5>
-                        <div class="dropdown mb-2">
-                            <button class="btn btn-sm dropdown-toggle" type="button" id="sortDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false"
-                                style="border: 2px solid #2A3855 !important;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h6 class="card-title text-muted mb-0">Your Recent Payments</h6>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle sort-dropdown" type="button" 
+                                id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if payment_filter == '7' %}
                                     Last 7 Days
                                 {% elif payment_filter == '15' %}
@@ -114,16 +152,16 @@
                                 {% elif payment_filter == '30' %}
                                     Last 30 Days
                                 {% elif payment_filter == '90' %}
-                                    last 3 Months
+                                    Last 3 Months
                                 {% else %}
                                     Sort By
                                 {% endif %}
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                                <li><a class="dropdown-item sort-option" href="?days=7">Last 7 Days</a></li>
-                                <li><a class="dropdown-item sort-option" href="?days=15">Last 15 Days</a></li>
-                                <li><a class="dropdown-item sort-option" href="?days=30">Last 30 Days</a></li>
-                                <li><a class="dropdown-item sort-option" href="?days=90">Last 3 Month</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
+                                <li><a class="dropdown-item" href="?days=7">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="?days=15">Last 15 Days</a></li>
+                                <li><a class="dropdown-item" href="?days=30">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="?days=90">Last 3 Months</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="?">Show All</a></li>
                             </ul>
@@ -131,13 +169,13 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <thead class="table-head">
-                                <tr class="border-2">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
                                     <th>Type</th>
                                     <th>Transaction ID</th>
                                     <th>Amount</th>
-                                    <th>Payment Date</th>
+                                    <th>Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -145,22 +183,27 @@
                                 {% for payment in payments %}
                                 <tr>
                                     <td>{{ payment.payment_title }}</td>
-                                    <td>{{ payment.transaction_id }}</td>
-                                    <td>रू {{ payment.amount }}</td>
+                                    <td><code>{{ payment.transaction_id }}</code></td>
+                                    <td class="fw-bold">रू {{ payment.amount }}</td>
                                     <td>{{ payment.payment_date|date:"Y-m-d" }}</td>
                                     <td>
                                         {% if payment.status == 'success' %}
-                                        <span class="badge bg-success">Success</span>
+                                        <span class="badge bg-success rounded-pill">Success</span>
                                         {% elif payment.status == 'failed' %}
-                                        <span class="badge bg-danger">Failed</span>
+                                        <span class="badge bg-danger rounded-pill">Failed</span>
                                         {% else %}
-                                        <span class="badge bg-warning">Pending</span>
+                                        <span class="badge bg-warning rounded-pill">Pending</span>
                                         {% endif %}
                                     </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="4" class="text-center">No payments found.</td>
+                                    <td colspan="5" class="text-center py-4">
+                                        <div class="py-2">
+                                            <i class="fas fa-wallet text-muted fs-1"></i>
+                                            <p class="text-muted mt-2 mb-0">No payments found</p>
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -169,10 +212,8 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-
 {% comment %} <!-- Trigger Button -->
 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#renewModal">
     Open Modal
@@ -181,3 +222,6 @@
 
 
 {% endblock content %}
+
+
+{% comment %} dont chnage the backend use bootstrap and same class name make the ui look professional {% endcomment %}

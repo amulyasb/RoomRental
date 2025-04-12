@@ -84,6 +84,11 @@ def roomlist(request):
             return redirect('login_user')
         
         all_rooms = Room.objects.all().order_by("-id")
+
+        # Handle city filter from URL parameter
+        city_id = request.GET.get('city')
+        if city_id:
+            all_rooms = all_rooms.filter(city_id=city_id).all()
         
         if request.method == "POST":
             searched_room = request.POST.get("searched_room_name")
@@ -91,8 +96,6 @@ def roomlist(request):
             max_price = request.POST.get("max-price")
             searched_city = request.POST.get("searched_city")
             print(searched_city)
-
-            # searched_city = city.objects.filter(id=searched_city_id).first()
 
             # for filter rooms
             # Filter by room title
