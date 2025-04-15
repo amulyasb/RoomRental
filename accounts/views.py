@@ -76,6 +76,8 @@ def seller_registration(request):
         photo = request.FILES.get("photo")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
+
+        amount = 500
         
         if password != confirm_password:
             messages.error(request, "Passwords and Confirm Password need to match!")
@@ -89,17 +91,13 @@ def seller_registration(request):
             messages.error(request, "Email already exists!")
             return redirect("seller_registration")
         purchase_order_id = str(uuid.uuid4())  # Generate a unique ID
-        print(purchase_order_id)
-        print(city_id)
-        print(photo)
-        print(phone)
 
         url = "https://dev.khalti.com/api/v2/epayment/initiate/"
 
         payload = json.dumps({
             "return_url": "http://127.0.0.1:8000/verify",
             "website_url": "http://127.0.0.1:8000/",
-            "amount": 500 * 100,
+            "amount": amount * 100,
             "purchase_order_id": purchase_order_id,
             "purchase_order_name": "Seller Subscription",
             "customer_info": {
@@ -192,7 +190,6 @@ def verify_payment(request):
                         phone=temp_user.get('phone'),
                         city=city_obj,
                         password=temp_user.get('password'),
-                        # user_image=temp_user.get('photo', None),
                         user_type='seller',
                         is_subscribed=True,
                         subscription_end_date=end_date,
@@ -201,15 +198,6 @@ def verify_payment(request):
                     if temp_user.get('photo'):
                         user.user_image = f"img/user_img/{temp_user['photo']}"
                         user.save()
-                    # print("User Created Successfully!")
-                    # print("Email:", user.email)
-                    # print("Name:", user.name)
-                    # print("Phone:", user.phone)
-                    # print("City:", user.city)
-                    # print("Photo:", user.user_image)
-                    # print("User Type:", user.user_type)
-                    # print("is_subscribed:", user.is_subscribed)
-                    # print("subscription_end_date:", user.subscription_end_date)
 
                     Subscription.objects.create(
                         seller=user, 
@@ -218,10 +206,11 @@ def verify_payment(request):
                         end_date=end_date,
                         is_active=True
                     )
+
                     payment_date = datetime.now()
                     Payment.objects.create(
                         seller=user, 
-                        amount= 500, 
+                        amount = int(new_response.get('total_amount')) // 100,
                         transaction_id=transaction_id,
                         payment_date=payment_date,
                         status='success',

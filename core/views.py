@@ -39,8 +39,10 @@ def homepage(request):
     notifications = None
     unread_notifications_count = None
 
-    # fetch featured room section
-    featured_rooms = Room.objects.all().order_by("-id")[:4]
+    # fetch featured room section    
+    featured_rooms = Room.objects.filter(
+        seller__is_subscribed=True
+    ).order_by("-id")[:4]
 
     # Delete expired notifications
     Notification.delete_old_notifications()
@@ -54,7 +56,7 @@ def homepage(request):
     if request.user.is_authenticated:
         user = request.user
         # Check if the user is not a customer
-        if request.user.user_type != 'customer':  
+        if request.user.user_type == 'seller':  
             return redirect('login_user')
         
         # Fetch notifications for the seller
@@ -85,7 +87,9 @@ def roomlist(request):
         if request.user.user_type != 'customer':  
             return redirect('login_user')
         
-        all_rooms = Room.objects.all().order_by("-id")
+        all_rooms = Room.objects.filter(
+            seller__is_subscribed=True
+        ).order_by("-id").all()
 
         # Handle city filter from URL parameter
         city_id = request.GET.get('city')

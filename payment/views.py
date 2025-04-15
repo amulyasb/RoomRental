@@ -17,6 +17,7 @@ def renew_subs(request):
     # Fetch city data
     cities = city.objects.all()
     if request.method == "POST":
+        amount = 300
         # generate unique purchase id
         purchase_order_id = str(uuid.uuid4())
 
@@ -25,26 +26,10 @@ def renew_subs(request):
         payload = json.dumps({
             "return_url": "http://127.0.0.1:8000/verify_renewal",
             "website_url": "http://127.0.0.1:8000/",
-            "amount": 500 * 100,   
+            "amount": amount*100,   
             "purchase_order_id": purchase_order_id,
             "purchase_order_name": "Seller Subscription Renewal",
         })
-        # if settings.TEST_MODE:
-        #     payload = json.dumps({
-        #         "return_url": "http://127.0.0.1:8000/verify_renewal",
-        #         "website_url": "http://127.0.0.1:8000/",
-        #         "amount": 500 * 100,
-        #         "purchase_order_id": purchase_order_id,
-        #         "purchase_order_name": "Seller Subscription Renewal",
-        #     })
-        # else:
-        #     payload = json.dumps({
-        #         "return_url": "http://127.0.0.1:8000/verify_renewal",
-        #         "website_url": "http://127.0.0.1:8000/",
-        #         "amount": 1500 * 100,
-        #         "purchase_order_id": purchase_order_id,
-        #         "purchase_order_name": "Seller Subscription Renewal",
-        #     })
 
         headers = {
             'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
@@ -52,9 +37,6 @@ def renew_subs(request):
         }
         response = requests.post(url, headers=headers, data=payload)
         print(response.text)
-
-        # print("khalti api response:", response_data)
-        # print(response.status_code)
 
         # Store renewal intent in session
         request.session['renewal_info'] = {
@@ -117,7 +99,7 @@ def verify_renewal(request):
             payment_date = datetime.now()
             Payment.objects.create(
                 seller=seller,
-                amount= 500,
+                amount = int(new_response.get('total_amount')) // 100,
                 transaction_id=transaction_id,
                 payment_date = payment_date,
                 status='success',
