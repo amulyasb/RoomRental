@@ -2,6 +2,8 @@ from pyexpat.errors import messages
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+
+from notifications.models import Notification
 from .models import ChatRoom, ChatMessage
 from rooms.models import *
 from django.db.models import Max
@@ -57,32 +59,63 @@ def chat_room(request, room_id):
 
 @login_required
 def customer_chat_list(request):
-        chat_rooms = ChatRoom.objects.filter(
-            customer=request.user
-        ).annotate(
-            latest_message_time=Max('messages__timestamp'),
-            has_real_unread=Exists(
-                ChatMessage.objects.filter(
-                    chat_room=OuterRef('pk'),
-                    read=False,
-                    sender=OuterRef('seller')
-                )
+    notifications = None
+    unread_notifications_count = None
+
+    if request.user.is_authenticated:
+        user=request.user
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
+    chat_rooms = ChatRoom.objects.filter(
+        customer=request.user
+    ).annotate(
+        latest_message_time=Max('messages__timestamp'),
+        has_real_unread=Exists(
+            ChatMessage.objects.filter(
+                chat_room=OuterRef('pk'),
+                read=False,
+                sender=OuterRef('seller')
             )
-        ).order_by('-latest_message_time', '-updated_at')
+        )
+    ).order_by('-latest_message_time', '-updated_at')
 
-        # Update status based on actual messages
-        for room in chat_rooms:
-            room.has_unread_messages = room.has_real_unread
-            room.save()
+    # Update status based on actual messages
+    for room in chat_rooms:
+        room.has_unread_messages = room.has_real_unread
+        room.save()
 
-        return render(request, 'customer_chatlist.html', {
-            'chat_rooms': chat_rooms,
-            'current_chat': None
-        })
+    return render(request, 'customer_chatlist.html', {
+        'chat_rooms': chat_rooms,
+        'current_chat': None,
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
+
+    })
 
 
 @login_required
 def seller_chat_list(request):
+    notifications = None
+    unread_notifications_count = None
+
+    if request.user.is_authenticated:
+        user=request.user
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
     chat_rooms = ChatRoom.objects.filter(
         seller=request.user
     ).annotate(
@@ -108,7 +141,9 @@ def seller_chat_list(request):
     
     return render(request, 'seller_chatlist.html', {
         'chat_rooms': chat_rooms,
-        'current_chat': None
+        'current_chat': None,
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
     })
 
 

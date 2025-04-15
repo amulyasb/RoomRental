@@ -4,11 +4,13 @@ from rooms.models import *
 from notifications.models import *
 from appointments.models import *
 from payment.models import *
+from core.models import *
 from django.core.paginator import Paginator
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+
 
 
 
@@ -140,20 +142,32 @@ def roomlist(request):
     }
     return render(request, "core/roomlist.html", data)
 
+
 def roomdetail(request,slug):
+    notifications = None
+    unread_notifications_count = None
     room_detail = Room.objects.get(room_slug = slug)
     room_specifications = Room_specification.objects.filter(room=room_detail)
     room_thumbnails = Room_thumbnail.objects.filter(room=room_detail)
+    user=request.user
     seller = room_detail.seller
     
     # Delete expired notifications
     Notification.delete_old_notifications()
+
+    # Fetch notifications for the seller
+    notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+        
+    # Count unread notifications
+    unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
 
     data = {
         "room_detail": room_detail,
         "room_specifications": room_specifications,
         "room_thumbnails": room_thumbnails,
         "seller": seller,
+        "notifications": notifications,
+        "unread_notifications_count": unread_notifications_count,
     }
 
     return render(request, "core/roomdetail.html", data)
@@ -234,13 +248,104 @@ def update_profile_customer(request):
             customer.save()
             messages.success(request, "Profile Updated Succesfully please login again")
             return redirect("login_user")
-
-        
         customer.save()
         messages.success(request, "Profile Updated Succesfully")
         return redirect("customer_profile")
     
     return render(request, "core/customer_profile.html")
+
+
+def customer_contact(request):
+    user = None
+    notifications = None
+    unread_notifications_count = None
+
+    if request.user.is_authenticated:
+        user=request.user
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
+    data={
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
+        'user': user,
+    }
+    return render(request, "core/customer_contact.html", data)
+
+def seller_contact(request):
+    notifications = None
+    unread_notifications_count = None
+
+    if request.user.is_authenticated:
+        user=request.user
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+
+    data={
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
+        }
+    return render(request, "seller/seller_contact.html", data)
+
+def  manage_contact(request):
+    user = request.user
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+        type = request.POST.get("type")
+
+        contact_form = contact.objects.create(
+            name = name,
+            email = email,
+            subject = subject,
+            message = message,
+            type = type
+        )
+        contact_form.save()
+        Notification.objects.create(
+            user = request.user,
+            message=f"{user.name.upper()}: Your Contact Form has been sent Successfully, We will figure out your issue and get back to you soon",
+            expires_at=timezone.now() + timedelta(days=30)
+        )
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
+def about(request):
+    notifications = None
+    unread_notifications_count = None
+
+    if request.user.is_authenticated:
+        user=request.user
+        # Delete expired notifications
+        Notification.delete_old_notifications()
+
+        # Fetch notifications for the seller
+        notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
+
+        # Count unread notifications
+        unread_notifications_count = Notification.objects.filter(user=user, is_read=False, expire_status=False).count()
+        
+    data={
+        'notifications': notifications,
+        'unread_notifications_count': unread_notifications_count,
+    }
+    return render(request, "core/aboutUs.html", data)
+
+
+
 
 
 

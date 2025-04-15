@@ -258,7 +258,11 @@
             {% for city in cities %}
             <div class="col-md-4 col-sm-6 col-12 p-3 text-center">
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'roomlist' %}?city={{ city.id }}" class="btn ">{{ city.city }}</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'roomlist' %}?city={{ city.id }}" class="btn">{{ city.city }}</a></li>
+                    {% else %}
+                    <li><a href="{% url 'roomlist' %}?city={{ city.id }}" data-bs-toggle="modal" data-bs-target="#loginModal" class="btn ">{{ city.city }}</a></li>
+                    {% endif %}
                 </ul>
             </div>
             {% endfor %}

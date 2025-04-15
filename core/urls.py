@@ -11,6 +11,10 @@ urlpatterns = [
     path("roomdetail/<slug>", views.roomdetail, name="roomdetail"),
     path("customer_profile/", views.customer_profile, name="customer_profile"),
     path("update_profile_customer/", views.update_profile_customer, name="update_profile_customer"),
+    path ("customer_contact/", views.customer_contact, name="customer_contact"),
+    path ("seller_contact/", views.seller_contact, name="seller_contact"),
+    path ("manage_contact/", views.manage_contact, name="manage_contact"),
+    path ("about-us/", views.about, name="about"),
 
     # seller views
     path("seller_dashboard/", views.seller_dashboard, name="seller_dashboard"),

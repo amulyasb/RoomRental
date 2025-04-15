@@ -1,0 +1,63 @@
+.customer-contact-header {
+    background-color: #2A3855;
+    color: white;
+    padding: 5rem 0;
+    margin-bottom: 3rem;
+}
+
+.contact-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    transition: transform 0.3s;
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+}
+
+.form-control:focus {
+    color: #2A3855 !important;
+    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+}
+
+.customer-contact-btn {
+    background-color: white;
+    border: 2px solid #2A3855;
+}
+
+.customer-contact-btn:hover {
+    background-color: #2A3855 !important;
+    color: white !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 8px rgba(42, 56, 85, 0.3);
+}
+
+.icon-contact-btn {
+    background-color: white;
+    border: 2px solid #2A3855;
+    color: #2A3855;
+}
+
+.icon-contact-btn:hover {
+    background-color: #2A3855;
+    color: white;
+}
+
+.contact-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.map-container {
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.map-container iframe {
+    height: 100%;
+    width: 100%;
+    border: none;
+}

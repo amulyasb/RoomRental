@@ -1,0 +1,109 @@
+.hero-section {
+    background-color: #2A3855 !important;
+    color: white;
+    padding: 6rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background-color: #f8f9fc;
+    transform: skewY(-3deg);
+    z-index: 1;
+}
+
+.about-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    transition: transform 0.3s;
+    margin-bottom: 30px;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+}
+
+.icon-box {
+    width: 70px;
+    height: 70px;
+    background-color: rgba(78, 115, 223, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.icon-box i {
+    font-size: 30px;
+    color: #2A3855 !important;
+}
+
+.team-member {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    margin-bottom: 30px;
+}
+
+.team-member img {
+    transition: transform 0.5s;
+    width: 100%;
+    height: auto;
+}
+
+.team-member:hover img {
+    transform: scale(1.05);
+}
+
+.team-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(78, 115, 223, 0.9);
+    color: white;
+    padding: 15px;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+}
+
+.team-member:hover .team-info {
+    transform: translateY(0);
+}
+
+.stats-item {
+    text-align: center;
+    padding: 30px 15px;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.section-title {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: rgb(92, 124, 189) !important;
+}

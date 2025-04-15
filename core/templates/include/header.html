@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{% static 'css/core/footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/core/roomlist.css' %}">
     <link rel="stylesheet" href="{% static 'css/core/roomdetail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/core/customer_contact.css' %}">
+    <link rel="stylesheet" href="{% static 'css/core/about.css' %}">
 
 </head>
 
@@ -81,10 +83,10 @@
                         </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link m-2" href="#">About</a>
+                            <a class="nav-link m-2" href="{% url 'about' %}">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link m-2" href="#">Contact</a>
+                            <a class="nav-link m-2" href="{% url 'customer_contact' %}">Contact</a>
                         </li>
                     </ul>
                     {% if user.is_authenticated %}
