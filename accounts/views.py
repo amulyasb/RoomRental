@@ -1,6 +1,9 @@
+from email.message import EmailMessage
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from RoomRental import settings
+import accounts
 from accounts.models import *
 from payment.models import Subscription, Payment
 import requests
@@ -9,6 +12,14 @@ import uuid
 import json
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.storage import default_storage
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
 
 
 
@@ -50,20 +61,106 @@ def customer_registration(request):
                 phone = phone,
                 city=city_obj,
                 password=password,
-                user_type='customer'
+                user_type='customer',
+                is_active=False  
+
             )
-            user.save()
-            messages.success(request, "Account Created Success")
-            return redirect("login_user")
+            # Send verification email
+            mail_subject = 'Activate your account'
+            email_template = 'registration/verification_email.html'
+            if send_verification_email(request, user, mail_subject, email_template):
+                messages.success(request, "Account created successfully! Please check your email to activate your account.")
+                return redirect("customer_registration")
+
+            else:
+                user.delete()
+                messages.error(request, "Account created but failed to send verification email. Please contact support.")
+                return render("customer_registration")
         else:
             messages.error(request, "Passwords and Confirm Password need to match!")
             return redirect('customer_registration')
 
-    
     return render(request, "registration/customer_registration.html", {'cities':cities})
 
 
 # seller registration
+# def seller_registration(request):
+#     # Fetch city data
+#     cities = city.objects.all()
+    
+#     if request.method == "POST":
+#         name = request.POST.get("name")
+#         email = request.POST.get("email").lower()
+#         phone = request.POST.get("phone")
+#         city_id = request.POST.get("city", "")
+#         photo = request.FILES.get("photo")
+#         password = request.POST.get("password")
+#         confirm_password = request.POST.get("confirm_password")
+
+#         amount = 500
+        
+#         if password != confirm_password:
+#             messages.error(request, "Passwords and Confirm Password need to match!")
+#             return redirect('seller_registration')
+
+#         if User.objects.filter(phone=phone).exists():
+#             messages.error(request, "Phone Number already taken")
+#             return redirect("seller_registration")
+
+#         if User.objects.filter(email=email).exists():
+#             messages.error(request, "Email already exists!")
+#             return redirect("seller_registration")
+#         purchase_order_id = str(uuid.uuid4())  # Generate a unique ID
+
+#         url = "https://dev.khalti.com/api/v2/epayment/initiate/"
+
+#         payload = json.dumps({
+#             "return_url": "http://127.0.0.1:8000/verify",
+#             "website_url": "http://127.0.0.1:8000/",
+#             "amount": amount * 100,
+#             "purchase_order_id": purchase_order_id,
+#             "purchase_order_name": "Seller Subscription",
+#             "customer_info": {
+#                 "name": name,
+#                 "email": email,
+#                 "phone": phone
+#             }
+
+#         })
+#         headers = {
+#             'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
+#             'Content-Type': 'application/json',
+#         }
+#         response = requests.post(url, headers=headers, data=payload)
+#         print(response.text)
+#         response_data = response.json()
+
+#         print("khalti api response:", response_data)
+#         print(response.status_code)
+
+
+#         if response.status_code == 200 :
+#             request.session['temp_user'] = json.dumps(
+#                 {
+#                 'name': name,
+#                 'email': email,
+#                 'phone': phone,
+#                 'city_id': city_id,
+#                 'photo': photo.name if photo else None,
+#                 'password': password,
+#                 }
+#             ) 
+#             # Save image temporarily
+#             if photo:
+#                 file_path = f"img/user_img/{photo.name}"
+#                 default_storage.save(file_path, photo)
+
+#             print("session data stored:", request.session['temp_user'])
+#             return redirect(response_data['payment_url'])
+        
+#     return render(request, "registration/seller_registration.html", {'cities': cities})
+
+
 def seller_registration(request):
     # Fetch city data
     cities = city.objects.all()
@@ -90,139 +187,39 @@ def seller_registration(request):
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists!")
             return redirect("seller_registration")
-        purchase_order_id = str(uuid.uuid4())  # Generate a unique ID
+        
+        city_obj = city.objects.filter(id=city_id).first() if city_id else None
 
-        url = "https://dev.khalti.com/api/v2/epayment/initiate/"
+        user = User.objects.create_user(
+            email=email,
+            name=name,
+            phone=phone,
+            city=city_obj,
+            password=password,
+            user_type='seller',
+            is_active=False,
+            is_subscribed=False
+        )
 
-        payload = json.dumps({
-            "return_url": "http://127.0.0.1:8000/verify",
-            "website_url": "http://127.0.0.1:8000/",
-            "amount": amount * 100,
-            "purchase_order_id": purchase_order_id,
-            "purchase_order_name": "Seller Subscription",
-            "customer_info": {
-                "name": name,
-                "email": email,
-                "phone": phone
-            }
+        if photo:
+            user.user_image = photo
+            user.save()
 
-        })
-        headers = {
-            'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
-            'Content-Type': 'application/json',
-        }
-        response = requests.post(url, headers=headers, data=payload)
-        print(response.text)
-        response_data = response.json()
-
-        print("khalti api response:", response_data)
-        print(response.status_code)
-
-
-        if response.status_code == 200 :
-            request.session['temp_user'] = json.dumps(
-                {
-                'name': name,
-                'email': email,
-                'phone': phone,
-                'city_id': city_id,
-                'photo': photo.name if photo else None,
-                'password': password,
-                }
-            ) 
-            # Save image temporarily
-            if photo:
-                file_path = f"img/user_img/{photo.name}"
-                default_storage.save(file_path, photo)
-
-            print("session data stored:", request.session['temp_user'])
-            return redirect(response_data['payment_url'])
+        # Send verification email
+        mail_subject = 'Verify your email to complete seller registration'
+        email_template = 'registration/verification_email.html'
+        if send_verification_email(request, user, mail_subject, email_template):
+            messages.success(request, "Verification email sent. Please check your email to complete your seller registration.")
+            return redirect("seller_registration")
+        else:
+            user.delete()
+            messages.error(request, "Failed to send verification email. Please try again..")
+            return render("seller_registration")
         
     return render(request, "registration/seller_registration.html", {'cities': cities})
 
 
-# For Verifying Payment and Create Seller
-def verify_payment(request):
-    lookup_url = "https://dev.khalti.com/api/v2/epayment/lookup/" 
-    
-    if request.method == 'GET':
-        headers = {
-            'Authorization': 'key 4f4e21dc08e64b358065d5ac50ab8163',
-            'Content-Type': 'application/json',
-        }
-        pidx = request.GET.get('pidx')
-        print("pidx:", pidx)
-        print("headers:", headers)
 
-        data = json.dumps({
-            'pidx': pidx
-        })
-        response = requests.post(lookup_url, headers=headers, data=data)
-        print(response.text)
-
-        new_response = json.loads(response.text)
-        print(new_response)
-
-        transaction_id = new_response.get('transaction_id', 'unkown transaction')
-        print("transaction_id:", transaction_id)
-        print(response.status_code)
-        print(new_response['status'])
-
-        # if response.status_code == 200:
-        if new_response['status'] == 'Completed':
-            temp_user = request.session.get('temp_user')
-            print(temp_user)
-            if not temp_user:
-                messages.error(request, "Session expired. Try again.")
-                return redirect('seller_registration')
-            else:
-                    temp_user = json.loads(temp_user)  # Convert JSON string to dictionary
-
-                    city_obj = city.objects.filter(id=temp_user.get('city_id')).first() if temp_user.get('city_id') else None
-                    print(city_obj)
-                    
-                    start_date = datetime.now()
-                    end_date = start_date + timedelta(days=30)
-                    
-                    user = User.objects.create_user(
-                        email=temp_user.get('email'),
-                        name=temp_user.get('name'),
-                        phone=temp_user.get('phone'),
-                        city=city_obj,
-                        password=temp_user.get('password'),
-                        user_type='seller',
-                        is_subscribed=True,
-                        subscription_end_date=end_date,
-                    )
-                    # Assign the saved image to the user
-                    if temp_user.get('photo'):
-                        user.user_image = f"img/user_img/{temp_user['photo']}"
-                        user.save()
-
-                    Subscription.objects.create(
-                        seller=user, 
-                        transaction_id=transaction_id,
-                        start_date=start_date,
-                        end_date=end_date,
-                        is_active=True
-                    )
-
-                    payment_date = datetime.now()
-                    Payment.objects.create(
-                        seller=user, 
-                        amount = int(new_response.get('total_amount')) // 100,
-                        transaction_id=transaction_id,
-                        payment_date=payment_date,
-                        status='success',
-                        payment_title='Account Created'
-                    )
-                    user.save()
-                    messages.success(request, "Payment Successful... Account Created")
-                    return redirect("login_user")
-
-        else:
-            messages.error(request, f"Payment verification failed: {new_response.get('detail', 'Unknown error.')}")
-            return redirect('seller_registration')
 
 # Login user
 def login_user(request):
@@ -230,29 +227,26 @@ def login_user(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-        print(User.objects.filter(email=email).exists())  # Debugging
-
-
         user = authenticate(request, username=email, password=password)
-
         if user:
-            print(User.objects.filter(email=email).exists())
+            if user.is_active:
 
-            login(request, user)
-            print(User.objects.filter(email=email).exists())
+                login(request, user)
 
-
-            if user.user_type == "seller":
-                return redirect("seller_dashboard")
-            elif user.user_type == "customer":
-                return redirect("homepage")
+                if user.user_type == "seller":
+                    return redirect("seller_dashboard")
+                elif user.user_type == "customer":
+                    return redirect("homepage")
+                else:
+                    messages.error(request, "Didnt Found Account")
+                    return redirect("login_user")
             else:
-                messages.error(request, "Didnt Found Account")
+                messages.error(request, "Your account is not active...")
                 return redirect("login_user")
         else:
             messages.error(request, "Invalid username or password")
             return redirect("login_user")
-            
+                
     return render(request, "registration/login.html")
 
 def logout_user(request):
@@ -260,3 +254,66 @@ def logout_user(request):
     return redirect('homepage')
 
 
+def send_verification_email(request, user, mail_subject, email_template):
+    try:
+        current_site = get_current_site(request)
+        message = render_to_string(email_template, {
+            'user': user,
+            'domain': current_site.domain,  # Use domain attribute
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': default_token_generator.make_token(user),
+        })
+        send_mail(
+            mail_subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            html_message=message,
+            fail_silently=False,
+        )
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
+
+
+def activate(request , uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        if user.user_type == "customer":
+            user.is_active = True
+            user.save()
+        elif user.user_type == "seller":
+            user.is_active = False
+            user.save()
+
+        if user.user_type == 'seller':
+            # For sellers, store info in session and redirect to payment
+            request.session['verified_seller'] = {
+                'id': user.id,
+                'email': user.email,
+                'name': user.name,
+                'phone': user.phone,
+                'city_id': user.city.id if user.city else None,
+                'photo': user.user_image.name if user.user_image else None,
+                'password': user.password,
+            }
+            request.session.modified = True
+            messages.success(request, 'Email verified! Please complete payment to activate your seller account.')
+            return redirect('seller_payment')
+        else:
+            # For customers, just activate and redirect to login
+            messages.success(request, 'Account activated! You can now login.')
+            return redirect('login_user')
+    else:
+        messages.error(request, 'Invalid activation link')
+        # Check if user exists before checking user_type
+        if user is not None and hasattr(user, 'user_type') and user.user_type == 'seller':
+            return redirect('seller_registration')
+        else:
+            return redirect('customer_registration')
+        

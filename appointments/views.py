@@ -35,7 +35,7 @@ def send_appointment_request(request, room_id):
         Notification.objects.create(
             user=seller,
             message=f"New appointment request from {request.user.name} for {room.title}.",
-            expires_at=timezone.now() + timedelta(minutes=10)
+            expires_at=timezone.now() + timedelta(days=5)
         )
         return redirect('roomdetail', slug=room.room_slug)
     
@@ -55,7 +55,7 @@ def approve_appointment_request(request, appointment_id):
             Notification.objects.create(
                 user = appointment.customer,
                 message=f"Your appointment request for {appointment.room.title} has been approved by {appointment.seller.name}.",
-                expires_at=timezone.now() + timedelta(minutes=10)
+                expires_at=timezone.now() + timedelta(days=5)
             )
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'seller_appointments'))
         
@@ -73,7 +73,7 @@ def reject_appointment_request(request, appointment_id):
             Notification.objects.create(
                 user = appointment.customer,
                 message=f"Your appointment request for {appointment.room.title} has been rejected by {appointment.seller.name}, for further inquiry contact seller {appointment.seller.phone}.",
-                expires_at=timezone.now() + timedelta(minutes=10)
+                expires_at=timezone.now() + timedelta(days=5)
             )
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'seller_appointments'))
         
@@ -95,7 +95,7 @@ def finished_appointment_request(request, appointment_id):
             Notification.objects.create(
                 user = appointment.customer,
                 message=f"Your appointment with {appointment.seller.name} for {appointment.room.title} has been Finished.",
-                expires_at=timezone.now() + timedelta(minutes=10)
+                expires_at=timezone.now() + timedelta(days=5)
             )
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'seller_appointments'))
         
@@ -118,7 +118,7 @@ def cancel_appointment_request(request, appointment_id):
             Notification.objects.create(
                 user = appointment.customer,
                 message=f"Your appointment with {appointment.seller.name} for {appointment.room.title} has been Cancel.",
-                expires_at=timezone.now() + timedelta(minutes=10)
+                expires_at=timezone.now() + timedelta(days=5)
             )
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', 'seller_appointments'))
         

@@ -47,6 +47,5 @@ class User(AbstractUser):
             self.is_subscribed = False
             subscriptions = self.subscriptions.filter(is_active=True)
             for subscription in subscriptions:
-                subscription.is_active = False
                 subscription.save()
             self.save()

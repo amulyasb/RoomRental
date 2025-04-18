@@ -1,0 +1,145 @@
+body {
+    background-color: #F5F7FA;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(42, 56, 85, 0.1);
+}
+
+.header-bg {
+    background-color: #2A3855;
+    color: white;
+    padding: 2rem;
+}
+
+.payment-card {
+    background: white;
+    border-left: 4px solid #00C9A7;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #E9ECEF;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.payment-method:hover,
+.payment-method.active {
+    border-color: #2A3855;
+    background-color: rgba(42, 56, 85, 0.03);
+}
+
+.feature-icon {
+    color: #00C9A7;
+    width: 20px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.btn-register {
+    background-color: white;
+    color: #2A3855;
+    border: 2px solid #2A3855;
+    padding: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background-color: #5C2D91;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(42, 56, 85, 0.2);
+}
+
+.khalti-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    object-fit: contain;
+}
+
+.verification-badge {
+    background-color: rgba(0, 201, 167, 0.1);
+    border-left: 4px solid #00C9A7;
+}
+
+.price-highlight {
+    color: #2A3855;
+    font-weight: 600;
+}
+
+.alert-message {
+    border-radius: 8px;
+    padding: 15px 20px;
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.message-icon {
+    font-size: 1.2rem;
+    margin-right: 12px;
+}
+
+.alert-success {
+    background-color: #f0f9f0;
+    border-color: #4CAF50;
+    color: #2d592f;
+}
+
+.alert-error {
+    background-color: #fdf0f0;
+    border-color: #f44336;
+    color: #8b2e2e;
+}
+
+.alert-warning {
+    background-color: #fff9e6;
+    border-color: #FFC107;
+    color: #8a6d3b;
+}
+
+.alert-info {
+    background-color: #f0f8ff;
+    border-color: #2196F3;
+    color: #31708f;
+}
+
+
+@media (max-width: 768px) {
+    .header-bg {
+        padding: 1.5rem;
+    }
+
+    .auth-card {
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-bg h3 {
+        font-size: 1.5rem;
+    }
+
+    .payment-method {
+        padding: 0.75rem;
+    }
+
+    .khalti-logo {
+        width: 36px;
+        height: 36px;
+    }
+}

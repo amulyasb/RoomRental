@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -202,3 +203,15 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+
+
+# email configuration 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587 
+EMAIL_HOST_USER = 'tvidea123@gmail.com'
+EMAIL_HOST_PASSWORD = 'bkaudtdxryohgiyf'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Room Rental  <tvidea123@gmail.com>'
+# print(EMAIL_HOST, EMAIL_HOST_PASSWORD, EMAIL_HOST_USER, EMAIL_PORT, )

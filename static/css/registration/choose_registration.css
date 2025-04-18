@@ -1,102 +1,63 @@
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --theme-primary: #2A3855;
+    --theme-light: rgba(42, 56, 85, 0.08);
 }
 
-.c-register-right {
+.theme-text {
     color: #2A3855;
 }
 
-.register-container b {
-    color: #2A3855;
+.theme-bg {
+    background-color: #2A3855;
 }
 
-.c-register-right-h1 {
-    font-size: 3.3rem !important;
+.theme-border {
+    border-color: #2A3855;
 }
 
-.txt {
-    color: #2A3855 !important;
+.theme-light-bg {
+    background-color: rgba(42, 56, 85, 0.05);
 }
 
-.icon-box {
-    font-size: 130px;
-    color: #2A3855;
+.registration-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    border: 1px solid rgba(42, 56, 85, 0.1);
 }
 
-.btn-register {
-    background-color: #ffffff;
+.registration-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(42, 56, 85, 0.12);
+}
+
+.icon-container {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(42, 56, 85, 0.1);
+    transition: all 0.3s ease;
+}
+
+.registration-card:hover .icon-container {
+    background-color: #2A3855;
+}
+
+.registration-card:hover .icon-container i {
+    color: white !important;
+}
+
+.btn-theme {
+    background-color: white;
     color: #2A3855;
     border: 2px solid #2A3855;
 }
 
-.btn-register:hover {
-    background-color: #2A3855 !important;
-    color: white !important;
-    transform: scale(1.05) !important;
-    box-shadow: 0 4px 8px rgba(42, 56, 85, 0.3);
+.btn-theme:hover {
+    background-color: #2A3855;
+    color: white;
 }
 
-@media (max-width: 760px) {
-    .c-register-right-h1 {
-        font-size: 2.8rem !important;
-    }
-}
-
-@media (max-width: 496px) {
-    .c-register-right-h1 {
-        font-size: 2.5rem !important;
-    }
-
-    .register-container img {
-        width: 150px;
-        height: 100px;
-    }
-}
-
-/* Responsive adjustments */
-@media (max-width: 767px) {
-    .select-main-section {
-        display: flex;
-        flex-direction: column-reverse;
-    }
-
-    .select-semi-section {
-        padding: 1rem;
-    }
-
-    .icon-box {
-        font-size: 80px;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-    }
-
-    h5 {
-        font-size: 1.1rem;
-    }
-
-    .btn-register {
-        width: 100%;
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .container-fluid {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .row {
-        margin-top: 20px;
-    }
-
-    h1 {
-        font-size: 1.25rem;
-    }
-
-    h5 {
-        font-size: 1rem;
+@media (max-width: 767.98px) {
+    .registration-card {
+        margin-bottom: 1.5rem;
     }
 }

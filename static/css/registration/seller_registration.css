@@ -1,75 +1,152 @@
-.c-register-right {
-    color: #2A3855;
+.container {
+    width: 100% !important;
+}
 
+.theme-text {
+    color: #2A3855;
+}
+
+.theme-bg {
+    background-color: #2A3855;
+}
+
+.welcome-section-top {
+    background: linear-gradient(135deg, rgba(42, 56, 85, 0.9), rgba(42, 56, 85, 0.95));
+    color: white;
+}
+
+.registration-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    max-width: 1400px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.payment-info-section {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.form-control:focus {
+    border-color: #2A3855;
+    box-shadow: 0 0 0 0.25rem rgba(42, 56, 85, 0.15);
+}
+
+.form-select {
+    padding: 12px 15px;
+    border-radius: 8px;
 }
 
 .btn-register {
-    background-color: #ffffff;
+    background-color: white;
     color: #2A3855;
     border: 2px solid #2A3855;
+    padding: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
 }
 
 .btn-register:hover {
-    background-color: #5C2D91 !important;
-    color: white !important;
-    transform: scale(1.00) !important;
-    box-shadow: 0 4px 8px rgba(42, 56, 85, 0.3);
+    background-color: #2A3855;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(42, 56, 85, 0.2);
 }
 
-.register-container b {
-    color: #2A3855;
+.payment-section {
+    background-color: rgba(42, 56, 85, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
 
+.step-number {
+    font-size: 0.875rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.process-steps li span:not(.step-number) {
+    padding-top: 2px;
 }
 
 .payment-text {
     color: #2A3855;
+    margin-bottom: 5px;
 }
 
-.payment-button-text {
-    color: #5C2D91;
-}
-
-/* Message display styling */
-.messages {
+.alert-message {
+    border-radius: 8px;
+    padding: 15px 20px;
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-.message {
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 1rem;
+.message-icon {
+    font-size: 1.2rem;
+    margin-right: 12px;
 }
 
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+.alert-success {
+    background-color: #f0f9f0;
+    border-color: #4CAF50;
+    color: #2d592f;
 }
 
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+.alert-error {
+    background-color: #fdf0f0;
+    border-color: #f44336;
+    color: #8b2e2e;
 }
 
-.c-register-right-h1 {
-    font-size: 3.3rem !important;
+.alert-warning {
+    background-color: #fff9e6;
+    border-color: #FFC107;
+    color: #8a6d3b;
 }
 
-@media (max-width: 760px) {
-    .c-register-right-h1 {
-        font-size: 2.8rem !important;
+.alert-info {
+    background-color: #f0f8ff;
+    border-color: #2196F3;
+    color: #31708f;
+}
+
+@media (max-width: 992px) {
+    .registration-container {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-info-section,
+    .form-section {
+        width: 100%;
     }
 }
 
-@media (max-width: 496px) {
-    .c-register-right-h1 {
-        font-size: 2.5rem !important;
-    }
+@media (max-width: 768px) {
 
-    .register-container img {
-        width: 150px;
-        height: 100px;
+    .welcome-section-top,
+    .payment-info-section,
+    .form-section {
+        padding: 1.5rem;
     }
 }
