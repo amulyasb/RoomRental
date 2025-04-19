@@ -21,13 +21,18 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include("accounts.urls")),
+    path('accounts/', include("accounts.urls")),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', include("core.urls")),
     path('', include("payment.urls")),
     path('', include("rooms.urls")),
     path('', include("appointments.urls")),
     path('', include("notifications.urls")),
     path('', include("chat.urls")),
+
+
+    path('admin/', admin.site.urls),
+
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

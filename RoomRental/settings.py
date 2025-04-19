@@ -40,6 +40,7 @@ AUTHENTICATION_BACKENDS = ['accounts.backends.EmailAuthBackend']
 
 INSTALLED_APPS = [
     'daphne',
+    'accounts',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'accounts',
     'payment',
     'rooms',
     'appointments',
@@ -170,6 +170,8 @@ JAZZMIN_SETTINGS = {
     "copyright": "RoomRental",
     "welcome_sign": "Welcome to the RoomRental",
     "show_ui_builder": True,
+    'hide_apps': ['auth'],
+    'disable_default_auth_views': True,
 
 }
 JAZZMIN_UI_TWEAKS = {
@@ -201,7 +203,9 @@ JAZZMIN_UI_TWEAKS = {
         "warning": "btn-warning",
         "danger": "btn-danger",
         "success": "btn-success"
-    }
+    },
+    'accounts_override': False,
+
 }
 
 
@@ -214,4 +218,8 @@ EMAIL_HOST_USER = 'tvidea123@gmail.com'
 EMAIL_HOST_PASSWORD = 'bkaudtdxryohgiyf'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Room Rental  <tvidea123@gmail.com>'
-# print(EMAIL_HOST, EMAIL_HOST_PASSWORD, EMAIL_HOST_USER, EMAIL_PORT, )
+
+EMAIL_SUBJECT_PREFIX = '[Room Rental] ' 
+DEFAULT_FROM_EMAIL = 'Room Rental <tvidea123@gmail.com>'
+
+SITE_NAME = "Room Rental"
