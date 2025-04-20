@@ -2,23 +2,16 @@ from email.message import EmailMessage
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from accounts.validation import validate_custom_password
 from RoomRental import settings
-import accounts
 from accounts.models import *
-from payment.models import Subscription, Payment
-import requests
-from datetime import datetime, timedelta
-import uuid
-import json
 from django.contrib.auth import authenticate, login, logout
-from django.core.files.storage import default_storage
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 
 
@@ -53,6 +46,16 @@ def customer_registration(request):
                 messages.error(request, "Email already exists!")
                 return redirect('customer_registration')
             
+            if len(phone)!= 10 or not phone.isdigit():
+                messages.error(request, "Phone Number must be 10 digits and contain number only")
+                return redirect('customer_registration')
+            
+            # Validate password
+            errors = validate_custom_password(password)
+            if errors:
+                messages.error(request, errors[0])
+                return redirect('customer_registration')
+            
             city_obj = city.objects.filter(id=city_id).first() if city_id else None
             
             user = get_user_model().objects.create_user(
@@ -75,7 +78,7 @@ def customer_registration(request):
             else:
                 user.delete()
                 messages.error(request, "Account created but failed to send verification email. Please contact support.")
-                return render("customer_registration")
+                return redirect("customer_registration")
         else:
             messages.error(request, "Passwords and Confirm Password need to match!")
             return redirect('customer_registration')
@@ -109,6 +112,16 @@ def seller_registration(request):
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists!")
             return redirect("seller_registration")
+        
+        if len(phone)!= 10 or not phone.isdigit():
+            messages.error(request, "Phone Number must be 10 digits and contain number only")
+            return redirect('customer_registration')
+        
+        # Validate password
+        errors = validate_custom_password(password)
+        if errors:
+            messages.error(request, errors[0])
+            return redirect('seller_registration')
         
         city_obj = city.objects.filter(id=city_id).first() if city_id else None
 

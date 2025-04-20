@@ -121,6 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONs': {
+            'min_length' : 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -220,6 +223,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Room Rental  <tvidea123@gmail.com>'
 
 EMAIL_SUBJECT_PREFIX = '[Room Rental] ' 
-DEFAULT_FROM_EMAIL = 'Room Rental <tvidea123@gmail.com>'
 
 SITE_NAME = "Room Rental"
