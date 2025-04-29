@@ -54,7 +54,7 @@ def customer_registration(request):
             errors = validate_custom_password(password)
             if errors:
                 messages.error(request, errors[0])
-                return redirect('customer_registration')
+                return redirect('customer_registration')   
             
             city_obj = city.objects.filter(id=city_id).first() if city_id else None
             

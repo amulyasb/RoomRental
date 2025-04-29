@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from accounts.models import *
+from accounts.validation import validate_custom_password
 from rooms.models import *
 from notifications.models import *
 from appointments.models import *
@@ -10,6 +11,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -33,7 +35,7 @@ def customer_mark_notifications_as_read(request):
 
 
 def homepage(request):
-    how_it_work_section = request.GET.get('type', 'customerSection')  # Default to 'customerSection'
+    how_it_work_section = request.GET.get('type', 'customerSection')
     cities = city.objects.all()
     user = None
     notifications = None
@@ -76,6 +78,7 @@ def homepage(request):
     }
     return render(request, "core/homepage.html", data)
 
+@login_required(login_url='login_user')
 def roomlist(request):
     cities = city.objects.all()
     notifications = None
@@ -86,6 +89,9 @@ def roomlist(request):
         # Check if the user is not a customer
         if request.user.user_type != 'customer':  
             return redirect('login_user')
+        
+        # Delete expired notifications
+        Notification.delete_old_notifications()
         
         all_rooms = Room.objects.filter(
             seller__is_subscribed=True
@@ -105,8 +111,10 @@ def roomlist(request):
 
             # for filter rooms
             # Filter by room title
+            
             if searched_room:
                 all_rooms = all_rooms.filter(title__icontains = searched_room)
+
             
             # Filter by city
             if min_price and max_price:
@@ -116,13 +124,11 @@ def roomlist(request):
             elif max_price:
                 all_rooms = all_rooms.filter(price__lte=max_price)
 
+
             # filter by city
             if searched_city:
                 all_rooms = all_rooms.filter(city=searched_city)
-
-        
-        # Delete expired notifications
-        Notification.delete_old_notifications()
+            
 
         # Fetch notifications for the seller
         notifications = Notification.objects.filter(user=user, expire_status=False).order_by('-created_at')
@@ -146,7 +152,7 @@ def roomlist(request):
     }
     return render(request, "core/roomlist.html", data)
 
-
+@login_required(login_url='login_user')
 def roomdetail(request,slug):
     notifications = None
     unread_notifications_count = None
@@ -176,6 +182,8 @@ def roomdetail(request,slug):
 
     return render(request, "core/roomdetail.html", data)
 
+
+@login_required(login_url='login_user')
 def customer_profile(request):
     cities = city.objects.all()
     notifications = None
@@ -203,10 +211,11 @@ def customer_profile(request):
 
     return render(request, "core/customer_profile.html", data)
 
+@login_required(login_url='login_user')
 def update_profile_customer(request):
     if request.method == 'POST':
         customer_name = request.POST.get("name")
-        customer_email = request.POST.get("email")
+        # customer_email = request.POST.get("email")
         customer_password = request.POST.get("password")
         customer_phone = request.POST.get("phone")
         customer_city = request.POST.get("city")
@@ -217,11 +226,11 @@ def update_profile_customer(request):
         customer = get_user_model().objects.get(id=customer_id)
 
             
-        # Check if the email already exists
-        if customer_email and customer_email != customer.email and get_user_model().objects.filter(email=customer_email).exclude(id=customer_id).exists(): 
-        #exclude checks for duplicate email in databse exclude remove the user and checks other user 
-            messages.error(request, "Email already exists!")
-            return redirect("customer_profile")
+        # # Check if the email already exists
+        # if customer_email and customer_email != customer.email and get_user_model().objects.filter(email=customer_email).exclude(id=customer_id).exists(): 
+        # #exclude checks for duplicate email in databse exclude remove the user and checks other user 
+        #     messages.error(request, "Email already exists!")
+        #     return redirect("customer_profile")
         
 
         # Check if phone is changed and already used by another user
@@ -229,9 +238,13 @@ def update_profile_customer(request):
             messages.error(request, "This phone number is already in use by another account.")
             return redirect('customer_profile')
 
+        if len(customer_phone)!= 10 or not customer_phone.isdigit():
+            messages.error(request, "Phone Number must be 10 digits and contain number only")
+            return redirect('customer_profile')
+        
         # fetch the user
         customer.name = customer_name
-        customer.email = customer_email
+        # customer.email = customer_email
         customer.phone = customer_phone
 
         # Update city only if a new city is provided
@@ -248,10 +261,16 @@ def update_profile_customer(request):
         
         # Update password only if provided
         if customer_password:
-            customer.set_password(customer_password)
-            customer.save()
-            messages.success(request, "Profile Updated Succesfully please login again")
-            return redirect("login_user")
+            # Validate password
+            errors = validate_custom_password(customer_password)
+            if errors:
+                messages.error(request, errors[0])
+                return redirect('customer_profile')
+            else:
+                customer.set_password(customer_password)
+                customer.save()
+                messages.success(request, "Profile Updated Succesfully please login again")
+                return redirect("login_user")
         customer.save()
         messages.success(request, "Profile Updated Succesfully")
         return redirect("customer_profile")
@@ -303,6 +322,7 @@ def seller_contact(request):
         }
     return render(request, "seller/seller_contact.html", data)
 
+@login_required(login_url='login_user')
 def  manage_contact(request):
     user = request.user
     if request.method == "POST":
@@ -317,7 +337,8 @@ def  manage_contact(request):
             email = email,
             subject = subject,
             message = message,
-            type = type
+            type = type,
+            created_at = timezone.now()
         )
         contact_form.save()
         Notification.objects.create(
@@ -355,6 +376,7 @@ def about(request):
 
 ###### seller #########
 ####### seller dashboard 
+@login_required(login_url='login_user')
 def seller_dashboard(request):
     subscription_remaning_days = None
     cities = city.objects.all()
@@ -424,6 +446,7 @@ def seller_dashboard(request):
 
 
 # seller all rooms
+@login_required(login_url='login_user')
 def seller_rooms(request):
     cities = city.objects.all()
 
@@ -462,6 +485,7 @@ def seller_rooms(request):
 
 
 # seller appointment 
+@login_required(login_url='login_user')
 def seller_appointments(request):
 
     cities = city.objects.all()
@@ -505,6 +529,9 @@ def seller_appointments(request):
         # fetching canceled appointments
         canceled_appointments = Appointment.objects.filter(seller=user, status='cancel').order_by('date')
 
+        # fetching rejected appointments
+        rejected_appointments = Appointment.objects.filter(seller=user, status='rejected').order_by('date')
+
         # Get filter value from URL
         filter_option = request.GET.get('filter', 'requests') 
                 
@@ -518,7 +545,9 @@ def seller_appointments(request):
         'appointment_requests': appointment_requests,
         'pending_appointments': pending_appointments,
         'finished_appointments': finished_appointments,
-        'canceled_appointments': canceled_appointments,            'notifications':notifications,
+        'canceled_appointments': canceled_appointments,
+        'rejected_appointments': rejected_appointments,
+        'notifications':notifications,
         'unread_notifications_count': unread_notifications_count,
         'filter_option': filter_option,
     }
@@ -527,6 +556,7 @@ def seller_appointments(request):
 
 
 # Seller Subscription
+@login_required(login_url='login_user')
 def seller_subscription(request):
     cities = city.objects.all()
     if request.user.is_authenticated:
@@ -591,6 +621,7 @@ def seller_subscription(request):
 
 
 # seller profile
+@login_required(login_url='login_user')
 def seller_profile(request):
 
     cities = city.objects.all()
@@ -626,7 +657,6 @@ def seller_profile(request):
 def update_profile_seller(request):
     if request.method == 'POST':
         seller_name = request.POST.get("name")
-        seller_email = request.POST.get("email")
         seller_password = request.POST.get("password")
         seller_phone = request.POST.get("phone")
         seller_city = request.POST.get("city")
@@ -634,23 +664,19 @@ def update_profile_seller(request):
         seller_id = request.user.id
 
         seller = get_user_model().objects.get(id=seller_id)
-
-            
-        # Check if the email already exists
-        if seller_email and seller_email != seller.email and get_user_model().objects.filter(email=seller_email).exclude(id=seller_id).exists(): 
-        #exclude checks for duplicate email in databse exclude remove the user and checks other user 
-            messages.error(request, "Email already exists!")
-            return redirect("seller_profile")
         
 
         # Check if phone is changed and already used by another user
         if seller_phone and seller_phone != seller.phone and get_user_model().objects.filter(phone=seller_phone).exclude(id=seller_id).exists():
             messages.error(request, "This phone number is already in use by another account.")
             return redirect('seller_profile')
+        
+        if len(seller_phone)!= 10 or not seller_phone.isdigit():
+            messages.error(request, "Phone Number must be 10 digits and contain number only")
+            return redirect('seller_profile')
 
         # fetch the user
         seller.name = seller_name
-        seller.email = seller_email
         seller.phone = seller_phone
 
         # Update city only if a new city is provided
@@ -667,12 +693,19 @@ def update_profile_seller(request):
         
         # Update password only if provided
         if seller_password:
-            seller.set_password(seller_password)
-            seller.save()
+
+        # Validate password
+            errors = validate_custom_password(seller_password)
+            if errors:
+                messages.error(request, errors[0])
+                return redirect('seller_profile')
+
+            else:
+        
+                seller.set_password(seller_password)
+                seller.save()
             messages.success(request, "Profile Updated Succesfully please login again")
             return redirect("login_user")
-
-        
         seller.save()
         messages.success(request, "Profile Updated Succesfully")
         return redirect("seller_profile")

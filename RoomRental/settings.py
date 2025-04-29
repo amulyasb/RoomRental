@@ -217,10 +217,10 @@ JAZZMIN_UI_TWEAKS = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587 
-EMAIL_HOST_USER = 'tvidea123@gmail.com'
-EMAIL_HOST_PASSWORD = 'bkaudtdxryohgiyf'
+EMAIL_HOST_USER = 'amul.baidhya123@gmail.com'
+EMAIL_HOST_PASSWORD = 'dkbq xrfg rwzg fcpo'
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'Room Rental  <tvidea123@gmail.com>'
+DEFAULT_FROM_EMAIL = 'Room Rental  <amul.baidhya123@gmail.com>'
 
 EMAIL_SUBJECT_PREFIX = '[Room Rental] ' 
 

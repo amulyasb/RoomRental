@@ -245,9 +245,69 @@
     </div>
 </div>
 
+{% comment %} <script>
+    const chatListSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
+    );
+
+    // Connection logging
+    chatListSocket.onopen = function(e) {
+        console.log("Chat list WebSocket connected");
+    };
+
+    chatListSocket.onclose = function(e) {
+        console.log("Chat list WebSocket disconnected", e);
+        // Optional: Add reconnection logic here
+    };
+
+    chatListSocket.onerror = function(e) {
+        console.error("Chat list WebSocket error:", e);
+    };
+
+    chatListSocket.onmessage = function(e) {
+        console.log("Chat list update received:", e.data);
+        const data = JSON.parse(e.data);
+        if (data.type === 'chat_list_update') {
+            updateChatList(data);
+        }
+    };
+
+    function updateChatList(data) {
+
+        
+        const chatItem = document.querySelector(`.chat-list-item[data-room-id="${data.room_id}"]`);
+        const chatList = document.getElementById('chatList');
+        
+        if (chatItem) {
+            // Update message preview
+            const messagePreview = chatItem.querySelector('.chat-list-info p');
+            if (messagePreview) {
+                messagePreview.textContent = data.latest_message;
+            }
+            
+            // Update unread indicator
+            const unreadIndicator = chatItem.querySelector('.unread-indicator');
+            if (unreadIndicator) {
+                if (data.has_unread) {
+                    unreadIndicator.classList.remove('d-none');
+                } else {
+                    unreadIndicator.classList.add('d-none');
+                }
+            }
+            
+            // Move to top
+            if (chatList.firstChild) {
+                chatList.insertBefore(chatItem, chatList.firstChild);
+            }
+        } else {
+            console.log("New chat room detected - might need to refresh");
+        }
+    }
+</script> {% endcomment %}
+
 <script>
     const chatListSocket = new WebSocket(
-        'wss://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
+        'ws://' + window.location.host + '/ws/chat_list/{{ request.user.id }}/'
     );
 
     // Connection handling with reconnection logic
@@ -402,7 +462,6 @@
             console.log("New chat room detected - might need to refresh");
         }
     }
-</script> {% endcomment %}
-
+</script>  {% endcomment %}
 
 {% endblock content %}

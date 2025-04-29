@@ -3,4 +3,4 @@ from chat.models import *
 
 # Register your models here.
 admin.site.register(ChatRoom)
-admin.site.register( ChatMessage)
+# admin.site.register( ChatMessage)

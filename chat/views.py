@@ -40,10 +40,6 @@ def chat_room(request, room_id):
 
     messages = ChatMessage.objects.filter(chat_room=chat_room).order_by('timestamp')
     
-    # # Mark messages as read when opening chat
-    # if request.user == chat_room.customer or request.user == chat_room.seller:
-    #     chat_room.mark_as_read(request.user)
-    
     # Get all chat rooms for the sidebar
     if request.user.user_type == 'customer':
         chat_rooms = ChatRoom.objects.filter(customer=request.user)
@@ -147,13 +143,6 @@ def seller_chat_list(request):
     })
 
 
-# @login_required
-# def delete_chat_room(request, room_id):
-#     chat_room = get_object_or_404(ChatRoom, id=room_id)
-#     if request.user not in [chat_room.customer, chat_room.seller]:
-#         return HttpResponseForbidden("No permission")
-#     chat_room.delete()
-#     return redirect('customer_chat_list' if request.user.user_type == 'customer' else 'seller_chat_list')
 
 
 

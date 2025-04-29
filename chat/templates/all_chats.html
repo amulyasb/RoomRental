@@ -313,9 +313,15 @@
             <p class="price mb-1">₹{{ current_chat.room.price }}</p>
             {% comment %} <p class="location mb-0">{{ current_chat.room.address }}, {{ current_chat.room.city.name }}</p> {% endcomment %}
         </div>
+        {% if user.user_type == 'customer' %}
         <div class="right-room-info text-md-end">
             <a href="{% url 'roomdetail' current_chat.room.room_slug %}" class="btn btn-outline btn-sm room-info-btn">View Room</a>
         </div>
+        {% endif %}
+        {% comment %} <div class="right-room-info text-md-end">
+            <a href="{% url 'roomdetail' current_chat.room.room_slug %}" class="btn btn-outline btn-sm room-info-btn">View Room</a>
+        </div>
+        {% endif %} {% endcomment %}
     </div>
     
 
